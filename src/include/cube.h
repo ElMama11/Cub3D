@@ -6,15 +6,16 @@
 /*   By: mverger <mverger@42lyon.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 15:05:30 by mverger           #+#    #+#             */
-/*   Updated: 2023/01/11 17:16:25 by mverger          ###   ########.fr       */
+/*   Updated: 2023/01/11 19:20:33 by mverger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUBE_H
 # define CUBE_H
 
-# include "../../mlx-linux/mlx.h"
+# include "../../mlx_linux/mlx.h"
 # include <math.h>
+# include <stdlib.h>
 
 # define screenWidth 800
 # define screenHeight 600

@@ -1,5 +1,5 @@
 NAME = cube
-GCCF = gcc -Wall -Werror -Wextra #-g3 -fsanitize=thread
+GCCF = gcc -Wall -Werror -Wextra -O3 -g3
 GREEN       = \033[32m
 RED         = \033[31m
 DEFAULT     = \033[37m

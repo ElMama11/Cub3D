@@ -6,11 +6,18 @@
 /*   By: mverger <mverger@42lyon.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 16:41:53 by jthibaul          #+#    #+#             */
-/*   Updated: 2023/01/11 17:39:10 by mverger          ###   ########.fr       */
+/*   Updated: 2023/01/11 19:21:03 by mverger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include/cube.h"
+
+double	ft_abs(double x)
+{
+	if (x < 0)
+		return (x *= -1);
+	return (x);
+}
 
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
@@ -54,13 +61,12 @@ void	ray_calculation(t_data *data)
 	if (data->raydirx == 0) //length of ray from one x or y-side to next x or y-side
 		data->deltadistx = 1e30;
 	else
-		data->deltadistx = abs(1 / data->raydirx);
+		data->deltadistx = ft_abs(1 / data->raydirx);
 	if (data->raydiry == 0) 
 		data->deltadisty = 1e30;
 	else
-		data->deltadisty = abs(1 / data->raydiry);
+		data->deltadisty = ft_abs(1 / data->raydiry);
 	data->perpwalldist = 0;
-	data->stepx = 0; //what direction to step in x or y-direction (either +1 or -1)
 	data->stepy = 0;
 	data->hit = 0;
 	data->side = 0;
@@ -71,21 +77,20 @@ void	print_vertical_line(int x, t_data *data, int draw_start, int draw_end)
 {
 	int	y;
 	char	*dst;
-	char	*color;
+	int	color;
 
+	dst = 0;
 	color = 0xff00; 
 	y = 0;
 	if (data->side == 1)
 		color = 0xff11;
 	while (y < screenHeight)
 	{
+		dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
 		if (y > draw_start && y < draw_end)
-		{
-			dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
-			dst = color;
-		}
+			*dst = color;
 		else
-			dst = 0x0;
+			*dst = 0x0;
 		y++;
 	}
 }
@@ -136,7 +141,7 @@ void	perform_dda(t_data *data, int x)
 
 }
 
-void	calculte_ray_pos(t_data *data)
+void	calculate_ray_pos(t_data *data)
 {
 	int	x;
 	int	w;
@@ -149,7 +154,7 @@ void	calculte_ray_pos(t_data *data)
 		data->raydirx = data->dirx + data->planex * data->camerax;
 		data->raydiry = data->diry + data->planey * data->camerax;
 		// calcul de la distance du prochain mur pour le rayon
-		ray_calcultion(data);
+		ray_calculation(data);
 		perform_dda(data, x);
 		x++;
 	}
@@ -178,5 +183,5 @@ int main()
 	while (done())
 	{
 		calculate_ray_pos(&data);
-	}	
+	}
 }
