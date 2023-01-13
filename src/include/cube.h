@@ -20,9 +20,11 @@
 # define screenWidth 800
 # define screenHeight 600
 
+#define mapWidth 24
+#define mapHeight 24
+
 typedef struct s_data
 {
-	int		**worldmap;
 	double	posx; //x and y start position
 	double	posy;
 	double	dirx; //initial direction vector
@@ -57,5 +59,8 @@ typedef struct s_data
 	int		endian;
 	
 }			t_data;
+
+void	init(t_data *data);
+
 
 #endif
