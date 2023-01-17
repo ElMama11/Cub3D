@@ -38,6 +38,113 @@ int worldmap[MAPWIDTH][MAPHEIGHT]=
 {1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
 {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
 };
+char	*ft_strdup(const char *s1)
+{
+	int		i;
+	char	*str_malloc;
+
+	i = 0;
+	while (s1[i])
+		i++;
+	str_malloc = (char *) malloc((i + 1) * sizeof(char));
+	if (str_malloc == NULL)
+		return (NULL);
+	i = 0;
+	while (s1[i])
+	{
+		str_malloc[i] = s1[i];
+		i++;
+	}
+	str_malloc[i] = '\0';
+	return (str_malloc);
+}
+
+static int	ft_count_digit(int n)
+{
+	int	nb_digit;
+
+	nb_digit = 0;
+	if (n < 0)
+		nb_digit++;
+	while (n != 0)
+	{
+		nb_digit++;
+		n /= 10;
+	}
+	return (nb_digit);
+}
+
+static char	*malloc_str(char *str_output, int nb_digit)
+{
+	str_output = (char *)malloc(sizeof(char) * (nb_digit + 1));
+	if (str_output == NULL)
+		return (NULL);
+	str_output[nb_digit] = '\0';
+	return (str_output);
+}
+
+static char	*output_cpy(int n, int nb_digit, char *str_output, int neg)
+{
+	int	i;
+	int	r;
+	int	j;
+
+	j = 0;
+	i = 0;
+	nb_digit -= 1;
+	if (neg == 1)
+		str_output[i++] = '-';
+	while (n != 0)
+	{
+		r = n % 10;
+		if (r < 0)
+		{
+			r *= -1;
+		}
+		str_output[nb_digit--] = r + '0';
+		j++;
+		n = n / 10;
+	}
+	return (str_output);
+}
+
+char	*ft_itoa(int n)
+{
+	char	*str_output;
+	int		nb_digit;
+	int		neg;
+
+	str_output = NULL;
+	if (n < 0)
+		neg = 1;
+	else
+		neg = 0;
+	if (n == 0)
+		return (ft_strdup("0"));
+	nb_digit = ft_count_digit(n);
+	str_output = malloc_str(str_output, nb_digit);
+	if (str_output == NULL)
+		return (NULL);
+	str_output = output_cpy(n, nb_digit, str_output, neg);
+	return (str_output);
+}
+
+
+
+
+
+
+void	hud_debug(t_data *data)
+{
+	char *x = ft_itoa(data->posx);
+	char *y = ft_itoa(data->posy);
+	mlx_string_put(data->mlx, data->mlx_win, 10, 10, 0x00fffff, "posx:");
+	printf("posx:%f\n", data->posx);
+	mlx_string_put(data->mlx, data->mlx_win, 80, 10, 0x00fffff, x);
+	mlx_string_put(data->mlx, data->mlx_win, 10, 30, 0x00fffff, "posy:");
+	printf("posy:%f\n", data->posy);
+	mlx_string_put(data->mlx, data->mlx_win, 80, 30, 0x00fffff, y);
+}
 
 void	free_all(t_data *data)
 {
@@ -48,32 +155,6 @@ void	close_window(t_data *data)
 {
 	free_all(data);
 	exit(0);
-}
-
-void	walk(t_data *data, int x, int y)
-{
-	if (!worldmap[(int)(data->posx + data->dirx * MOVSPEED)][(int)(data->posy)])
-		data->posx += data->dirx * MOVSPEED * x;
-	if (!worldmap[(int)(data->posx)][(int)(data->posy + data->diry * MOVSPEED)])
-		data->posy += data->diry * MOVSPEED * y;	
-}
-
-int	action(int keycode, t_data *data)
-{
-	if(keycode == ECHAP)
-		close_window(data);
-	if(keycode == KEY_W)
-		walk(data, 1, 0);
-	if(keycode == KEY_S)
-		walk(data, -1, 0);
-	if(keycode == KEY_D)
-		walk(data, 0, 1);
-	if(keycode == KEY_A)
-		walk(data, 0 , -1);
-	// if(keycode == KEY_RIGHT)
-	// 	look(data, 1);
-	// if(keycode == KEY_LEFT)
-	// 	look(data, -1);
 }
 
 void set_hook(t_data *data)
@@ -212,6 +293,8 @@ void	perform_dda(t_data *data, int x)
 
 }
 
+
+
 void	calculate_ray_pos(t_data *data)
 {
 	int	x;
@@ -230,6 +313,48 @@ void	calculate_ray_pos(t_data *data)
 		x++;
 	}
 	mlx_put_image_to_window(data->mlx, data->mlx_win, data->img, 0, 0);
+	hud_debug(data);
+
+}
+
+void	walk(t_data *data, int x, int y)
+{
+	printf("OK0\n");
+	sleep(2);
+	printf("mlx:%p\n", data->mlx);
+	printf("new posx:%f\n", (data->posx + (data->dirx * x * MOVSPEED)));
+	if (worldmap[(int)(data->posx + (data->dirx * x * MOVSPEED))][(int)(data->posy)] == 0)
+	{
+		printf("OK0.5\n");
+		data->posx += data->dirx * MOVSPEED * x;
+	}
+	printf("OK1\n");
+	if (worldmap[(int)(data->posx)][(int)(data->posy + (data->diry * y * MOVSPEED))] == 0) //Teamedfunsc3&
+	{
+		printf("OK1.5\n");
+		data->posy += data->diry * MOVSPEED * y;
+	}
+	printf("OK2\n");
+	calculate_ray_pos(data);
+}
+
+int	action(int keycode, t_data *data)
+{
+	printf("OK2 %d posx=%f\n", keycode, data->posx);
+	if(keycode == ECHAP)
+		close_window(data);
+	if(keycode == KEY_W)
+		walk(data, 1, 0);
+	if(keycode == KEY_S)
+		walk(data, -1, 0);
+	if(keycode == KEY_D)
+		walk(data, 0, 1);
+	if(keycode == KEY_A)
+		walk(data, 0 , -1);
+	// if(keycode == KEY_RIGHT)
+	// 	look(data, 1);
+	// if(keycode == KEY_LEFT)
+	// 	look(data, -1);
 }
 
 int	done()
@@ -248,11 +373,20 @@ void img_init(t_data *data)
 
 int main()
 {
-	t_data	data;
+	t_data	*data;
 
 	init(&data);
 	img_init(&data);
 	set_hook(&data);
+		printf("mlx:%p\n", data.mlx);
 	calculate_ray_pos(&data);
+	// int	i = 0;
+	// while (i < 50)
+	// {
+	// 	sleep(1);
+	// 	walk(&data, 1, 0);
+	// 	calculate_ray_pos(&data);
+	// 	i++;
+	// }
 	mlx_loop(data.mlx);
 }

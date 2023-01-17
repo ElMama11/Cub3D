@@ -16,7 +16,8 @@
 # include "../../mlx_linux/mlx.h"
 # include <math.h>
 # include <stdlib.h>
-
+# include <stdio.h>
+ 
 # define SCREENWIDTH 800
 # define SCREENHEIGHT 600
 
@@ -27,13 +28,15 @@
 # define ROTSPEED 0.2
 
 /* KEY */
-# define KEY_LEFT 105
-# define KEY_RIGHT 106
-# define KEY_W 17
-# define KEY_S 31
-# define KEY_D 32
-# define KEY_A 30
+# define KEY_LEFT 65361
+# define KEY_RIGHT 65363
+# define KEY_W 122
+# define KEY_S 115
+# define KEY_D 100
+# define KEY_A 113
 # define ECHAP 1
+
+// Teamedfunsc3&
 
 // # ifndef MAP
 // #  define MAP
