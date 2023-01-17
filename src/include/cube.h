@@ -6,7 +6,7 @@
 /*   By: jthibaul <jthibaul@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 15:05:30 by mverger           #+#    #+#             */
-/*   Updated: 2023/01/17 08:41:27 by jthibaul         ###   ########.fr       */
+/*   Updated: 2023/01/17 08:49:47 by jthibaul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,9 @@
 
 #define mapWidth 24
 #define mapHeight 24
+
+# define mouv_nb 0.2
+# define dir_nb 0.2
 
 /* KEY */
 # define KEY_LEFT 105
