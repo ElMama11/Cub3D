@@ -1,5 +1,5 @@
 NAME = cube
-GCCF = gcc -Wall -Werror -Wextra -g3
+GCCF = gcc -g3 #-Wall -Werror -Wextra
 GREEN       = \033[32m
 RED         = \033[31m
 DEFAULT     = \033[37m
@@ -8,6 +8,7 @@ PATHSRC = src/
 INCLUDE_PATH=include/
 DEP = Makefile src/$(INCLUDE_PATH)/cube.h
 SRC =   main.c	\
+		hook.c	\
 		init.c
 LIBFT = libft/libft.a
 MLX = -Lmlx_linux -lmlx_Linux -L /usr/lib -Imlx_linux -lXext -lX11 -lm -lz

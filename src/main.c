@@ -3,21 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jthibaul <jthibaul@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mverger <mverger@42lyon.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 16:41:53 by jthibaul          #+#    #+#             */
-/*   Updated: 2023/01/17 08:16:58 by jthibaul         ###   ########.fr       */
+/*   Updated: 2023/01/17 16:17:42 by mverger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include/cube.h"
-
-void	free_all(t_data *data)
-{
-	void(data);
-}
-
-int worldmap[mapWidth][mapHeight]=
+int worldmap[MAPWIDTH][MAPHEIGHT]=
 {
 {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
 {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
@@ -44,6 +38,50 @@ int worldmap[mapWidth][mapHeight]=
 {1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
 {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
 };
+
+void	free_all(t_data *data)
+{
+	(void)data;
+}
+
+void	close_window(t_data *data)
+{
+	free_all(data);
+	exit(0);
+}
+
+void	walk(t_data *data, int x, int y)
+{
+	if (!worldmap[(int)(data->posx + data->dirx * MOVSPEED)][(int)(data->posy)])
+		data->posx += data->dirx * MOVSPEED * x;
+	if (!worldmap[(int)(data->posx)][(int)(data->posy + data->diry * MOVSPEED)])
+		data->posy += data->diry * MOVSPEED * y;	
+}
+
+int	action(int keycode, t_data *data)
+{
+	if(keycode == ECHAP)
+		close_window(data);
+	if(keycode == KEY_W)
+		walk(data, 1, 0);
+	if(keycode == KEY_S)
+		walk(data, -1, 0);
+	if(keycode == KEY_D)
+		walk(data, 0, 1);
+	if(keycode == KEY_A)
+		walk(data, 0 , -1);
+	// if(keycode == KEY_RIGHT)
+	// 	look(data, 1);
+	// if(keycode == KEY_LEFT)
+	// 	look(data, -1);
+}
+
+void set_hook(t_data *data)
+{
+	
+	mlx_key_hook(data->mlx_win, action, &data);
+	// mlx_hook(data->mlx_win, 17, 0L, close_window, data);	// RED_CROSS / DESTROY / MAC
+}
 
 double	ft_abs(double x)
 {
@@ -117,7 +155,7 @@ void	print_vertical_line(int x, t_data *data, int draw_start, int draw_end)
 	y = 0;
 	if (data->side == 1)
 		color = 0xffefff;
-	while (y < screenHeight)
+	while (y < SCREENHEIGHT)
 	{
 		dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
 		if (y > draw_start && y < draw_end)
@@ -135,7 +173,7 @@ void	calculate_wall_height(t_data *data, int x)
 	int	draw_start;
 	int	draw_end;
 
-	h = screenHeight;
+	h = SCREENHEIGHT;
 	line_height = (int)(h / data->perpwalldist); //Calculate height of line to draw on screen
 	//calculate lowest and highest pixel to fill in current stripe
 	draw_start = -line_height / 2 + h / 2;
@@ -179,7 +217,7 @@ void	calculate_ray_pos(t_data *data)
 	int	x;
 	int	w;
 
-	w = screenWidth;
+	w = SCREENWIDTH;
 	x = 0;
 	while (x < w)
 	{
@@ -202,8 +240,8 @@ int	done()
 void img_init(t_data *data)
 {
 	data->mlx = mlx_init();
-	data->mlx_win = mlx_new_window(data->mlx, screenWidth, screenHeight, "Cube3D");
-	data->img = mlx_new_image(data->mlx, screenWidth, screenHeight);
+	data->mlx_win = mlx_new_window(data->mlx, SCREENWIDTH, SCREENHEIGHT, "Cube3D");
+	data->img = mlx_new_image(data->mlx, SCREENWIDTH, SCREENHEIGHT);
 	data->addr = mlx_get_data_addr(data->img, &data->bits_per_pixel,
 			&data->line_length, &data->endian);
 }
@@ -213,7 +251,6 @@ int main()
 	t_data	data;
 
 	init(&data);
-
 	img_init(&data);
 	set_hook(&data);
 	calculate_ray_pos(&data);
