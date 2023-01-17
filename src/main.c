@@ -3,14 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mverger <mverger@42lyon.fr>                +#+  +:+       +#+        */
+/*   By: jthibaul <jthibaul@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 16:41:53 by jthibaul          #+#    #+#             */
-/*   Updated: 2023/01/13 15:39:10 by mverger          ###   ########.fr       */
+/*   Updated: 2023/01/17 08:16:58 by jthibaul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include/cube.h"
+
+void	free_all(t_data *data)
+{
+	void(data);
+}
 
 int worldmap[mapWidth][mapHeight]=
 {
@@ -196,6 +201,8 @@ int	done()
 
 void img_init(t_data *data)
 {
+	data->mlx = mlx_init();
+	data->mlx_win = mlx_new_window(data->mlx, screenWidth, screenHeight, "Cube3D");
 	data->img = mlx_new_image(data->mlx, screenWidth, screenHeight);
 	data->addr = mlx_get_data_addr(data->img, &data->bits_per_pixel,
 			&data->line_length, &data->endian);
@@ -206,11 +213,9 @@ int main()
 	t_data	data;
 
 	init(&data);
-	data.mlx = mlx_init();
-	data.mlx_win = mlx_new_window(data.mlx, screenWidth, screenHeight, "Cube3D");
+
 	img_init(&data);
-	while (done())
-	{
-		calculate_ray_pos(&data);
-	}
+	set_hook(&data);
+	calculate_ray_pos(&data);
+	mlx_loop(data.mlx);
 }

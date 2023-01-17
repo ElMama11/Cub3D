@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mverger <mverger@42lyon.fr>                +#+  +:+       +#+        */
+/*   By: jthibaul <jthibaul@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 15:05:30 by mverger           #+#    #+#             */
-/*   Updated: 2023/01/13 15:40:49 by mverger          ###   ########.fr       */
+/*   Updated: 2023/01/17 08:41:27 by jthibaul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,15 @@
 
 #define mapWidth 24
 #define mapHeight 24
+
+/* KEY */
+# define KEY_LEFT 105
+# define KEY_RIGHT 106
+# define KEY_W 17
+# define KEY_S 31
+# define KEY_D 32
+# define KEY_A 30
+# define ECHAP 1
 
 typedef struct s_data
 {
