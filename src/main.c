@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mverger <mverger@42lyon.fr>                +#+  +:+       +#+        */
+/*   By: jthibaul <jthibaul@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 16:41:53 by jthibaul          #+#    #+#             */
-/*   Updated: 2023/01/17 16:17:42 by mverger          ###   ########.fr       */
+/*   Updated: 2023/01/18 09:22:13 by jthibaul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -335,7 +335,6 @@ void	walk(t_data *data, int x, int y)
 		data->posy += data->diry * MOVSPEED * y;
 	}
 	printf("OK2\n");
-	calculate_ray_pos(data);
 }
 
 int	action(int keycode, t_data *data)
@@ -373,13 +372,14 @@ void img_init(t_data *data)
 
 int main()
 {
-	t_data	*data;
+	t_data	data;
 
 	init(&data);
 	img_init(&data);
 	set_hook(&data);
-		printf("mlx:%p\n", data.mlx);
-	calculate_ray_pos(&data);
+	printf("mlx:%p\n", data.mlx);
+	mlx_loop_hook(data.mlx_win, &calculate_ray_pos, &data);
+	// calculate_ray_pos(&data);
 	// int	i = 0;
 	// while (i < 50)
 	// {
