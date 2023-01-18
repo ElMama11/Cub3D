@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jthibaul <jthibaul@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mverger <mverger@42lyon.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 16:41:53 by jthibaul          #+#    #+#             */
-/*   Updated: 2023/01/18 09:22:13 by jthibaul         ###   ########.fr       */
+/*   Updated: 2023/01/18 16:04:55 by mverger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -286,8 +286,6 @@ void	perform_dda(t_data *data, int x)
 
 }
 
-
-
 void	calculate_ray_pos(t_data *data)
 {
 	int	x;
@@ -308,6 +306,19 @@ void	calculate_ray_pos(t_data *data)
 	mlx_put_image_to_window(data->mlx, data->mlx_win, data->img, 0, 0);
 	hud_debug(data);
 
+}
+
+void	rotate(t_data *data, int direction)
+{
+	double	olddirx;
+	double	oldplanex;
+
+	olddirx = data->dirx;
+	data->dirx = data->dirx * cos(-ROTSPEED) - data->diry * sin(ROTSPEED * direction);
+	data->diry = olddirx * sin(-ROTSPEED) + data->diry * cos(ROTSPEED * direction);
+	oldplanex = data->planex;
+	data->planex = data->planex	* cos(-ROTSPEED) - data->planey * sin(ROTSPEED * direction);
+	data->planey = oldplanex * sin(-ROTSPEED) + data->planey * cos(ROTSPEED * direction);
 }
 
 void	walk(t_data *data, int x, int y)
@@ -349,10 +360,10 @@ int	action(int keycode, t_data *data)
 		walk(data, 0, -1);
 	if(keycode == KEY_A)
 		walk(data, 0 , 1);
-	// if(keycode == KEY_RIGHT)
-	// 	look(data, 1);
-	// if(keycode == KEY_LEFT)
-	// 	look(data, -1);
+	if(keycode == KEY_RIGHT)
+		rotate(data, -1);
+	if(keycode == KEY_LEFT)
+		rotate(data, 1);
 	main_loop(data);
 }
 
