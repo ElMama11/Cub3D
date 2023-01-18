@@ -24,7 +24,7 @@
 #define MAPWIDTH 24
 #define MAPHEIGHT 24
 
-# define MOVSPEED 0.2
+# define MOVSPEED 1
 # define ROTSPEED 0.2
 
 /* KEY */

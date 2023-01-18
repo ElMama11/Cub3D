@@ -139,10 +139,10 @@ void	hud_debug(t_data *data)
 	char *x = ft_itoa(data->posx);
 	char *y = ft_itoa(data->posy);
 	mlx_string_put(data->mlx, data->mlx_win, 10, 10, 0x00fffff, "posx:");
-	printf("posx:%f\n", data->posx);
+	// printf("posx:%f\n", data->posx);
 	mlx_string_put(data->mlx, data->mlx_win, 80, 10, 0x00fffff, x);
 	mlx_string_put(data->mlx, data->mlx_win, 10, 30, 0x00fffff, "posy:");
-	printf("posy:%f\n", data->posy);
+	//printf("posy:%f\n", data->posy);
 	mlx_string_put(data->mlx, data->mlx_win, 80, 30, 0x00fffff, y);
 }
 
@@ -155,13 +155,6 @@ void	close_window(t_data *data)
 {
 	free_all(data);
 	exit(0);
-}
-
-void set_hook(t_data *data)
-{
-	
-	mlx_key_hook(data->mlx_win, action, &data);
-	// mlx_hook(data->mlx_win, 17, 0L, close_window, data);	// RED_CROSS / DESTROY / MAC
 }
 
 double	ft_abs(double x)
@@ -319,10 +312,10 @@ void	calculate_ray_pos(t_data *data)
 
 void	walk(t_data *data, int x, int y)
 {
-	printf("OK0\n");
-	sleep(2);
-	printf("mlx:%p\n", data->mlx);
-	printf("new posx:%f\n", (data->posx + (data->dirx * x * MOVSPEED)));
+	// printf("OK0\n");
+	// sleep(2);
+	// printf("mlx:%p\n", data->mlx);
+	// printf("new posx:%f\n", (data->posx + (data->dirx * x * MOVSPEED)));
 	if (worldmap[(int)(data->posx + (data->dirx * x * MOVSPEED))][(int)(data->posy)] == 0)
 	{
 		printf("OK0.5\n");
@@ -337,9 +330,15 @@ void	walk(t_data *data, int x, int y)
 	printf("OK2\n");
 }
 
-int	action(int keycode, t_data *data)
+int main_loop(t_data *data)
 {
-	printf("OK2 %d posx=%f\n", keycode, data->posx);
+	calculate_ray_pos(data);
+	return (0);
+}
+
+int	action(int keycode, t_data *data)
+{	
+	printf("OK150 %d posx=%f\n", keycode, data->posx);
 	if(keycode == ECHAP)
 		close_window(data);
 	if(keycode == KEY_W)
@@ -347,13 +346,14 @@ int	action(int keycode, t_data *data)
 	if(keycode == KEY_S)
 		walk(data, -1, 0);
 	if(keycode == KEY_D)
-		walk(data, 0, 1);
+		walk(data, 0, -1);
 	if(keycode == KEY_A)
-		walk(data, 0 , -1);
+		walk(data, 0 , 1);
 	// if(keycode == KEY_RIGHT)
 	// 	look(data, 1);
 	// if(keycode == KEY_LEFT)
 	// 	look(data, -1);
+	main_loop(data);
 }
 
 int	done()
@@ -376,10 +376,10 @@ int main()
 
 	init(&data);
 	img_init(&data);
-	set_hook(&data);
+	mlx_key_hook(data.mlx_win, action, &data);
 	printf("mlx:%p\n", data.mlx);
-	mlx_loop_hook(data.mlx_win, &calculate_ray_pos, &data);
-	// calculate_ray_pos(&data);
+	calculate_ray_pos(&data);
+	// mlx_loop_hook(data.mlx, main_loop, &data);
 	// int	i = 0;
 	// while (i < 50)
 	// {
@@ -388,5 +388,6 @@ int main()
 	// 	calculate_ray_pos(&data);
 	// 	i++;
 	// }
+	printf("posx:%f\n", data.posx);
 	mlx_loop(data.mlx);
 }
