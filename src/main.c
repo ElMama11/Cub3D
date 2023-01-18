@@ -6,7 +6,7 @@
 /*   By: mverger <mverger@42lyon.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 16:41:53 by jthibaul          #+#    #+#             */
-/*   Updated: 2023/01/18 16:04:55 by mverger          ###   ########.fr       */
+/*   Updated: 2023/01/18 16:11:14 by mverger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -314,11 +314,11 @@ void	rotate(t_data *data, int direction)
 	double	oldplanex;
 
 	olddirx = data->dirx;
-	data->dirx = data->dirx * cos(-ROTSPEED) - data->diry * sin(ROTSPEED * direction);
-	data->diry = olddirx * sin(-ROTSPEED) + data->diry * cos(ROTSPEED * direction);
+	data->dirx = data->dirx * cos(ROTSPEED * direction) - data->diry * sin(ROTSPEED * direction);
+	data->diry = olddirx * sin(ROTSPEED * direction) + data->diry * cos(ROTSPEED * direction);
 	oldplanex = data->planex;
-	data->planex = data->planex	* cos(-ROTSPEED) - data->planey * sin(ROTSPEED * direction);
-	data->planey = oldplanex * sin(-ROTSPEED) + data->planey * cos(ROTSPEED * direction);
+	data->planex = data->planex	* cos(ROTSPEED * direction) - data->planey * sin(ROTSPEED * direction);
+	data->planey = oldplanex * sin(ROTSPEED * direction) + data->planey * cos(ROTSPEED * direction);
 }
 
 void	walk(t_data *data, int x, int y)
