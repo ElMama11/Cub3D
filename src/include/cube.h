@@ -24,8 +24,8 @@
 #define MAPWIDTH 24
 #define MAPHEIGHT 24
 
-# define MOVSPEED 1
-# define ROTSPEED 0.2
+# define MOVSPEED 0.7
+# define ROTSPEED 3.14/12
 
 /* KEY */
 # define KEY_LEFT 65361
@@ -37,6 +37,7 @@
 # define ECHAP 1
 
 // Teamedfunsc3&
+
 
 // # ifndef MAP
 // #  define MAP

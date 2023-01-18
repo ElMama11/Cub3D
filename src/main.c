@@ -6,7 +6,7 @@
 /*   By: mverger <mverger@42lyon.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 16:41:53 by jthibaul          #+#    #+#             */
-/*   Updated: 2023/01/18 16:11:14 by mverger          ###   ########.fr       */
+/*   Updated: 2023/01/18 16:04:55 by mverger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,10 +139,8 @@ void	hud_debug(t_data *data)
 	char *x = ft_itoa(data->posx);
 	char *y = ft_itoa(data->posy);
 	mlx_string_put(data->mlx, data->mlx_win, 10, 10, 0x00fffff, "posx:");
-	// printf("posx:%f\n", data->posx);
 	mlx_string_put(data->mlx, data->mlx_win, 80, 10, 0x00fffff, x);
 	mlx_string_put(data->mlx, data->mlx_win, 10, 30, 0x00fffff, "posy:");
-	//printf("posy:%f\n", data->posy);
 	mlx_string_put(data->mlx, data->mlx_win, 80, 30, 0x00fffff, y);
 }
 
@@ -295,7 +293,7 @@ void	calculate_ray_pos(t_data *data)
 	x = 0;
 	while (x < w)
 	{
-		data->camerax = 2 * x / ((double)w - 1); //x-coordinate in camera space, calculate ray position and direction 3l+
+		data->camerax = 2 * x / (double)w - 1; //x-coordinate in camera space, calculate ray position and direction 3l+
 		data->raydirx = data->dirx + data->planex * data->camerax;
 		data->raydiry = data->diry + data->planey * data->camerax;
 		// calcul de la distance du prochain mur pour le rayon
@@ -321,24 +319,50 @@ void	rotate(t_data *data, int direction)
 	data->planey = oldplanex * sin(ROTSPEED * direction) + data->planey * cos(ROTSPEED * direction);
 }
 
-void	walk(t_data *data, int x, int y)
+void	walk_forward(t_data *data)
 {
-	// printf("OK0\n");
-	// sleep(2);
-	// printf("mlx:%p\n", data->mlx);
-	// printf("new posx:%f\n", (data->posx + (data->dirx * x * MOVSPEED)));
-	if (worldmap[(int)(data->posx + (data->dirx * x * MOVSPEED))][(int)(data->posy)] == 0)
-	{
-		printf("OK0.5\n");
-		data->posx += data->dirx * MOVSPEED * x;
-	}
-	printf("OK1\n");
-	if (worldmap[(int)(data->posx)][(int)(data->posy + (data->diry * y * MOVSPEED))] == 0) //Teamedfunsc3&
-	{
-		printf("OK1.5\n");
-		data->posy += data->diry * MOVSPEED * y;
-	}
-	printf("OK2\n");
+	printf("dirx:%f\ndiry:%f\n", data->dirx, data->diry);
+	if (worldmap[(int)(data->posx + (data->dirx * MOVSPEED))][(int)(data->posy)] == 0)
+		data->posx += data->dirx * MOVSPEED;
+	if (worldmap[(int)(data->posx)][(int)(data->posy + (data->diry * MOVSPEED))] == 0) //Teamedfunsc3&
+		data->posy += data->diry * MOVSPEED;
+}
+void	walk_backward(t_data *data)
+{
+	if (worldmap[(int)(data->posx - (data->dirx * MOVSPEED))][(int)(data->posy)] == 0)
+		data->posx -= data->dirx * MOVSPEED;
+	if (worldmap[(int)(data->posx)][(int)(data->posy - (data->diry * MOVSPEED))] == 0) //Teamedfunsc3&
+		data->posy -= data->diry * MOVSPEED;
+}
+void	walk_left(t_data *data)
+{
+	double	tempdirx;
+	double	tempdiry;
+
+	tempdirx = data->dirx;
+	tempdiry = data->diry;
+	
+	tempdirx = data->dirx * cos(3.14/2) - data->diry * sin(3.14/2);
+	tempdiry = data->dirx * sin(3.14/2) + data->diry * cos(3.14/2);
+	if (worldmap[(int)(data->posx + (tempdirx * MOVSPEED))][(int)(data->posy)] == 0)
+		data->posx += tempdirx * MOVSPEED;
+	if (worldmap[(int)(data->posx)][(int)(data->posy + (tempdiry * MOVSPEED))] == 0) //Teamedfunsc3&
+		data->posy += tempdiry * MOVSPEED;
+}
+void	walk_right(t_data *data)
+{
+	double	tempdirx;
+	double	tempdiry;
+
+	tempdirx = data->dirx;
+	tempdiry = data->diry;
+	
+	tempdirx = data->dirx * cos(-3.14/2) - data->diry * sin(-3.14/2);
+	tempdiry = data->dirx * sin(-3.14/2) + data->diry * cos(-3.14/2);
+	if (worldmap[(int)(data->posx + (tempdirx * MOVSPEED))][(int)(data->posy)] == 0)
+		data->posx += tempdirx * MOVSPEED;
+	if (worldmap[(int)(data->posx)][(int)(data->posy + (tempdiry * MOVSPEED))] == 0) //Teamedfunsc3&
+		data->posy += tempdiry * MOVSPEED;
 }
 
 int main_loop(t_data *data)
@@ -349,17 +373,16 @@ int main_loop(t_data *data)
 
 int	action(int keycode, t_data *data)
 {	
-	printf("OK150 %d posx=%f\n", keycode, data->posx);
 	if(keycode == ECHAP)
 		close_window(data);
 	if(keycode == KEY_W)
-		walk(data, 1, 0);
+		walk_forward(data);
 	if(keycode == KEY_S)
-		walk(data, -1, 0);
+		walk_backward(data);
 	if(keycode == KEY_D)
-		walk(data, 0, -1);
+		walk_right(data);
 	if(keycode == KEY_A)
-		walk(data, 0 , 1);
+		walk_left(data);
 	if(keycode == KEY_RIGHT)
 		rotate(data, -1);
 	if(keycode == KEY_LEFT)
@@ -388,9 +411,8 @@ int main()
 	init(&data);
 	img_init(&data);
 	mlx_key_hook(data.mlx_win, action, &data);
-	printf("mlx:%p\n", data.mlx);
-	calculate_ray_pos(&data);
-	// mlx_loop_hook(data.mlx, main_loop, &data);
+	// calculate_ray_pos(&data);
+	mlx_loop_hook(data.mlx, main_loop, &data);
 	// int	i = 0;
 	// while (i < 50)
 	// {
@@ -399,6 +421,5 @@ int main()
 	// 	calculate_ray_pos(&data);
 	// 	i++;
 	// }
-	printf("posx:%f\n", data.posx);
 	mlx_loop(data.mlx);
 }
