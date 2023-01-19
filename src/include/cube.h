@@ -6,7 +6,7 @@
 /*   By: mverger <mverger@42lyon.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 15:05:30 by mverger           #+#    #+#             */
-/*   Updated: 2023/01/19 15:02:51 by mverger          ###   ########.fr       */
+/*   Updated: 2023/01/19 17:42:12 by mverger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,17 @@
 // {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
 // };
 // # endif
+typedef struct s_img
+{
+	void	*img;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_length;
+	int		texwidth;
+	int		texheight;
+	int		endian;
+}				t_img;
+
 typedef struct s_data
 {
 	double	posx; //x and y start position
@@ -106,7 +117,12 @@ typedef struct s_data
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
-	
+	char	buffer[SCREENHEIGHT][SCREENWIDTH];
+	t_img	*img_tex;
+	int		texx;
+	int		draw_start;
+	int		draw_end;
+	int		texnum;
 }			t_data;
 
 void	init(t_data *data);

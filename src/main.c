@@ -6,7 +6,7 @@
 /*   By: mverger <mverger@42lyon.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 16:41:53 by jthibaul          #+#    #+#             */
-/*   Updated: 2023/01/19 15:02:02 by mverger          ###   ########.fr       */
+/*   Updated: 2023/01/19 17:41:55 by mverger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,45 +216,109 @@ void	ray_calculation(t_data *data)
 	calculate_step_init_sidedist(data); //calculate step and initial sideDist
 }
 
-void	print_vertical_line(int x, t_data *data, int draw_start, int draw_end)
+// void	print_vertical_line(int x, t_data *data, int draw_start, int draw_end)
+// {
+// 	int	y;
+// 	char	*dst;
+// 	int	color;
+
+// 	dst = 0;
+// 	color = 0xffefd5; 
+// 	y = 0;
+// 	if (data->side == 1)
+// 		color = 0xffefff;
+// 	while (y < SCREENHEIGHT)
+// 	{
+// 		dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
+// 		if (y > draw_start && y < draw_end)
+// 			*dst = color;
+// 		else
+// 			*dst = 0x0;
+// 		y++;
+// 	}
+// }
+
+void	print_vertical_line(int x, t_data *data)
 {
 	int	y;
 	char	*dst;
-	int	color;
 
 	dst = 0;
-	color = 0xffefd5; 
 	y = 0;
-	if (data->side == 1)
-		color = 0xffefff;
 	while (y < SCREENHEIGHT)
 	{
-		dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
-		if (y > draw_start && y < draw_end)
-			*dst = color;
-		else
-			*dst = 0x0;
+		dst = (char *)(data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8)));	
+		*dst = (char)(data->buffer[y][x]);
 		y++;
 	}
 }
 
+void	fill_buf(t_data *data, int x, int lineheight, int h)
+{
+	double			step;
+	double			texpos;
+	int				y;
+	int				texy;
+	char			*color;
+	
+	y = 0;
+	step = 1 * TEXHEIGHT / lineheight;
+	texpos = (data->draw_start - h / 2 + lineheight / 2) * step;
+	while (y < SCREENHEIGHT)
+	{
+		texy = (int)texpos & (TEXHEIGHT - 1);
+		texpos = step;
+		if (y > data->draw_start && y < data->draw_end)
+		{
+			color = (data->img_tex[0].addr + (y * data->img_tex[0].line_length + x * (data->img_tex[0].bits_per_pixel / 8)));
+			if (data->side == 1)
+				color += 50;
+		}
+		else
+			color = 0x0;
+		data->buffer[y][x] = *color;
+		y++;
+	}
+	print_vertical_line(x, data);
+}
+
+int	wall_hitpoint(t_data *data, int x)
+{
+	int		texnum;
+	double	wallx;
+	
+	data->texx = 0;
+	texnum = 0;
+	if (data->side == 0)
+		wallx = data->posy + data->perpwalldist * data->raydirx;
+	else
+		wallx = data->posx + data->perpwalldist * data->raydirx;
+	wallx -= floor((wallx));
+	data->texx = (int)wallx * (double)TEXWIDTH;
+	if (data->side == 0 && data->raydirx > 0)
+		data->texx = TEXWIDTH - data->texx - 1;
+	if (data->side == 1 && data->raydiry < 0)
+		data->texx = TEXWIDTH - data->texx - 1;
+	return (texnum);
+}
+
 void	calculate_wall_height(t_data *data, int x)
 {
-	int	line_height;
+	int	lineheight;
 	int	h;
-	int	draw_start;
-	int	draw_end;
-
+	
 	h = SCREENHEIGHT;
-	line_height = (int)(h / data->perpwalldist); //Calculate height of line to draw on screen
+	lineheight = (int)(h / data->perpwalldist); //Calculate height of line to draw on screen
 	//calculate lowest and highest pixel to fill in current stripe
-	draw_start = -line_height / 2 + h / 2;
-	if (draw_start < 0)
-		draw_start = 0;
-	draw_end = line_height / 2 + h / 2;
-	if (draw_end >= h)
-		draw_end = h - 1;
-	print_vertical_line(x, data, draw_start, draw_end);
+	data->draw_start = -lineheight / 2 + h / 2;
+	if (data->draw_start < 0)
+		data->draw_start = 0;
+	data->draw_end = lineheight / 2 + h / 2;
+	if (data->draw_end >= h)
+		data->draw_end = h - 1;
+	//print_vertical_line(x, data, draw_start, draw_end);
+	data->texnum = wall_hitpoint(data, x);
+	fill_buf(data, x, lineheight, h);
 }
 
 void	perform_dda(t_data *data, int x)
@@ -284,6 +348,25 @@ void	perform_dda(t_data *data, int x)
 
 }
 
+void	clear_buf(t_data *data)
+{
+	int	x;
+	int	y;
+
+	x = 0;
+	y = 0;
+	while (y < SCREENHEIGHT)
+	{
+		while (x < SCREENWIDTH)
+		{
+			data->buffer[y][x] = 0;
+			x++;
+		}
+		y++;
+		x = 0;
+	}
+}
+
 void	calculate_ray_pos(t_data *data)
 {
 	int	x;
@@ -291,6 +374,7 @@ void	calculate_ray_pos(t_data *data)
 
 	w = SCREENWIDTH;
 	x = 0;
+	clear_buf(data);
 	while (x < w)
 	{
 		data->camerax = 2 * x / (double)w - 1; //x-coordinate in camera space, calculate ray position and direction 3l+
