@@ -17,7 +17,7 @@ void	init(t_data *data)
 	data->posx = 22;
 	data->posy = 12;
 	data->dirx = -1;
-	data->diry = -1;
+	data->diry = 0;
 	data->planex = 0;
 	data->planey = 0.66;
 	data->time = 0;
