@@ -6,7 +6,7 @@
 /*   By: mverger <mverger@42lyon.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 15:05:30 by mverger           #+#    #+#             */
-/*   Updated: 2023/01/17 16:13:31 by mverger          ###   ########.fr       */
+/*   Updated: 2023/01/19 15:02:51 by mverger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,11 @@
 # define SCREENWIDTH 800
 # define SCREENHEIGHT 600
 
-#define MAPWIDTH 24
-#define MAPHEIGHT 24
+# define MAPWIDTH 24
+# define MAPHEIGHT 24
+
+# define TEXWIDTH 128
+# define TEXHEIGHT 128
 
 # define MOVSPEED 0.7
 # define ROTSPEED 3.14/12
