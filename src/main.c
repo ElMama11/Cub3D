@@ -261,7 +261,8 @@ void	fill_buf(t_data *data, int x, int lineheight, int h)
 	double			texpos;
 	int				y;
 	int				texy;
-	char			*color;
+	unsigned int	*color;
+
 
 	y = 0;
 	step = 1 * TEXHEIGHT / lineheight;
@@ -273,11 +274,11 @@ void	fill_buf(t_data *data, int x, int lineheight, int h)
 		texpos = step;
 		if (y > data->draw_start && y < data->draw_end)
 		{
-			color = (data->img_tex[0].addr + (y * data->img_tex[0].line_length + x * (data->img_tex[0].bits_per_pixel / 8)));
+			printf("color:%d\nbuffer:%d\nx:%d\ny:%d\n\n", *color, data->buffer[y][x], x, y);
+			color = (unsigned int *)(data->img_tex[0].addr + (y * data->img_tex[0].line_length + x * (data->img_tex[0].bits_per_pixel / 8)));
 			if (data->side == 1)
 				*color += 50;
 			data->buffer[y][x] = *color;
-		// 	printf("color:%d\nx:%d\ny:%d\n", *color, x, y);
 		}
 		else
 		{
