@@ -14,13 +14,14 @@
 
 void	init_textures(t_data *data)
 {
+		printf("????????\n");
+
 	data->img_tex = malloc(sizeof(t_img) * 4);
+	data->img_tex[0].img = mlx_xpm_file_to_image(data->mlx, "textures/chair_shinji", &data->img_tex[0].texwidth, &data->img_tex[0].texheight);
+	data->img_tex[0].addr = mlx_get_data_addr(data->img_tex[0].img, &data->img_tex[0].bits_per_pixel, &data->img_tex[0].line_length, &data->img_tex[0].endian);
+
 	// data->img_tex[0].texwidth = 128;
 	// data->img_tex[0].texheight = 128;
-	// data->img_tex[0].img = mlx_new_image(data->img_tex[0].mlx, TEXWIDTH, TEXHEIGHT);
-	data->img_tex[0].img = mlx_xpm_file_to_image(data->mlx, "textures/chair_shinji", &data->img_tex[0].texwidth, &data->img_tex[0].texheight);
-
-	data->img_tex[0].addr = mlx_get_data_addr(data->img_tex[0].img, &data->img_tex[0].bits_per_pixel, &data->img_tex[0].line_length, &data->img_tex[0].endian);
 }
 
 void	init(t_data *data)
