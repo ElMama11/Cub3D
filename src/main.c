@@ -241,13 +241,13 @@ void	ray_calculation(t_data *data)
 void	print_vertical_line(int x, t_data *data)
 {
 	int	y;
-	char	*dst;
+	unsigned int	*dst;
 
 	dst = 0;
 	y = 0;
 	while (y < SCREENHEIGHT)
 	{
-		dst = (char *)(data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8)));	
+		dst = (unsigned int *)(data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8)));	
 		*dst = data->buffer[y][x];
 		y++;
 	}
@@ -259,10 +259,12 @@ void	fill_buf(t_data *data, int x, int lineheight, int h)
 	double			texpos;
 	int				y;
 	int				texy;
-	unsigned char			*color;
-	
+	// int				texx;
+	unsigned int			*color;
+
+	// texx = data->wallx * TEXWIDTH;
 	y = 0;
-	step = 1 * TEXHEIGHT / lineheight;
+	step = 1.0 * TEXHEIGHT / lineheight;
 	texpos = (data->draw_start - h / 2 + lineheight / 2) * step;
 	while (y < SCREENHEIGHT)
 	{
@@ -270,9 +272,10 @@ void	fill_buf(t_data *data, int x, int lineheight, int h)
 		{
 			texy = (int)texpos & (TEXHEIGHT - 1);
 			texpos += step;
-			color = (data->img_tex[0].addr + (texy * data->img_tex[0].line_length + x * (data->img_tex[0].bits_per_pixel / 8)));
+			// printf("texx %d\n", data->texx);
+			color = (unsigned int *)(data->img_tex[0].addr + ((texy * data->img_tex[0].line_length) + ((int)data->texx * (data->img_tex[0].bits_per_pixel / 8))));
 			// if (data->side == 1)
-			// 	*color += 50;
+			// 	*color += 0xfff;
 			// printf("????????%p\n", color);
 			data->buffer[y][x] = *color;
 			// printf("x:%d        y:%d       color:%d\n", x,y, *color);
@@ -282,7 +285,7 @@ void	fill_buf(t_data *data, int x, int lineheight, int h)
 		if (y > SCREENHEIGHT / 2)
 			*color = 0x0;
 		else
-			*color = (unsigned char)0xfffafa;
+			*color = (unsigned int)0xff4500;
 		// printf("x:%d        y:%d\n", x,y);
 		data->buffer[y][x] = *color;
 		free(color);
@@ -303,11 +306,22 @@ int	wall_hitpoint(t_data *data, int x)
 	else
 		wallx = data->posx + data->perpwalldist * data->raydirx;
 	wallx -= floor((wallx));
-	data->texx = (int)wallx * (double)TEXWIDTH;
+	data->texx = (int)(wallx * (double)TEXWIDTH);
 	if (data->side == 0 && data->raydirx > 0)
+	{
+		printf("side==0   texx before=%d\n", data->texx);
 		data->texx = TEXWIDTH - data->texx - 1;
-	if (data->side == 1 && data->raydiry < 0)
+		printf("side==0   texx after=%d\n", data->texx);
+	}
+	else if (data->side == 1 && data->raydiry < 0)
+	{
+		printf("side==1   texx before=%d\n", data->texx);
 		data->texx = TEXWIDTH - data->texx - 1;
+		printf("side==1   texx after=%d\n", data->texx);
+	}
+	else
+		printf("no modif   texx after=%d\n", data->texx);
+	data->wallx = wallx;
 	return (texnum);
 }
 
@@ -505,7 +519,7 @@ int main()
 	init(&data);
 	mlx_key_hook(data.mlx_win, action, &data);
 	calculate_ray_pos(&data);
-	mlx_loop_hook(data.mlx, main_loop, &data);
+	// mlx_loop_hook(data.mlx, main_loop, &data);
 	// int	i = 0;
 	// while (i < 50)
 	// {

@@ -117,12 +117,14 @@ typedef struct s_data
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
-	char	buffer[SCREENHEIGHT][SCREENWIDTH];
+	unsigned int	buffer[SCREENHEIGHT][SCREENWIDTH];
 	t_img	*img_tex;
 	int		texx;
 	int		draw_start;
 	int		draw_end;
 	int		texnum;
+
+	double	wallx;
 }			t_data;
 
 void	init(t_data *data);
