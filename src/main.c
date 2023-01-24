@@ -130,11 +130,6 @@ char	*ft_itoa(int n)
 	return (str_output);
 }
 
-
-
-
-
-
 void	hud_debug(t_data *data)
 {
 	char *x = ft_itoa(data->posx);
@@ -214,30 +209,7 @@ void	ray_calculation(t_data *data)
 	data->stepy = 0;
 	data->hit = 0;
 	data->side = 0;
-	calculate_step_init_sidedist(data); //calculate step and initial sideDist
 }
-
-// void	print_vertical_line(int x, t_data *data, int draw_start, int draw_end)
-// {
-// 	int	y;
-// 	char	*dst;
-// 	int	color;
-
-// 	dst = 0;
-// 	color = 0xffefd5; 
-// 	y = 0;
-// 	if (data->side == 1)
-// 		color = 0xffefff;
-// 	while (y < SCREENHEIGHT)
-// 	{
-// 		dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
-// 		if (y > draw_start && y < draw_end)
-// 			*dst = color;
-// 		else
-// 			*dst = 0x0;
-// 		y++;
-// 	}
-// }
 
 void	print_vertical_line(int x, t_data *data)
 {
@@ -291,10 +263,8 @@ void	fill_buf(t_data *data, int x, int lineheight, int h)
 	double			texpos;
 	int				y;
 	int				texy;
-	// int				texx;
 	unsigned int			*color;
 
-	// texx = data->wallx * TEXWIDTH;
 	y = 0;
 	step = 1.0 * TEXHEIGHT / lineheight;
 	texpos = (data->draw_start - h / 2 + lineheight / 2) * step;
@@ -304,18 +274,8 @@ void	fill_buf(t_data *data, int x, int lineheight, int h)
 		{
 			texy = (int)texpos & (TEXHEIGHT - 1);
 			texpos += step;
-			// printf("texx %d\n", data->texx);
-			
 			color = (unsigned int *)(data->img_tex[0].addr + ((texy * data->img_tex[0].line_length) + ((int)data->texx * (data->img_tex[0].bits_per_pixel / 8))));
-
-			// if (data->side == 1)
-			// 	*color += 0xfff;
-			// printf("????????%p\n", color);
-			
-			
-
 			data->buffer[y][x] = *color;
-			// printf("x:%d        y:%d       color:%d\n", x,y, *color);
 			y++;
 		}
 		color = malloc(sizeof(char) * 3);
@@ -323,58 +283,11 @@ void	fill_buf(t_data *data, int x, int lineheight, int h)
 			*color = 0x0;
 		else
 			*color = (unsigned int)0xff4500;
-		// printf("x:%d        y:%d\n", x,y);
 		data->buffer[y][x] = *color;
 		free(color);
 		y++;
 	}
-	print_vertical_line(x, data);
 }
-
-// void	fill_buf(t_data *data, int x, int lineheight, int h)
-// {
-// 	double			step;
-// 	double			texpos;
-// 	int				y;
-// 	int				texy;
-// 	// int				texx;
-// 	unsigned int			color;
-// 	int pos;
-
-// 	// texx = data->wallx * TEXWIDTH;
-// 	y = 0;
-// 	step = 1.0 * TEXHEIGHT / lineheight;
-// 	texpos = (data->draw_start - h / 2 + lineheight / 2) * step;
-// 	while (y < SCREENHEIGHT)
-// 	{
-// 		// while (y > data->draw_start && y < data->draw_end)
-// 		// {
-// 		// 	texy = (int)texpos & (TEXHEIGHT - 1);
-// 		// 	texpos += step;
-// 		// 	// printf("texx %d\n", data->texx);
-// 		// 	pos = data->img_tex->texheight * texy + data->texx;
-// 		// 	color = data->img_tex->my_img[pos];
-// 		// 	//color = (data->img_tex[0].addr + ((texy * data->img_tex[0].line_length) + ((int)data->texx * (data->img_tex[0].bits_per_pixel / 8))));
-// 		// 	if (data->side == 1)
-// 		// 		color = (color >> 1) & 8355711;
-// 		// 	// printf("????????%p\n", color);
-// 		// 	data->buffer[y][x] = color;
-// 		// 	// printf("x:%d        y:%d       color:%d\n", x,y, *color);
-// 		// 	y++;
-// 		// }
-		// ft_trace_line(x, data, lineheight);
-		//color = malloc(sizeof(char) * 3);
-// 		if (y > SCREENHEIGHT / 2)
-// 			color = 0x0;
-// 		else
-// 			color = (unsigned int)0xff4500;
-// 		// printf("x:%d        y:%d\n", x,y);
-// 		data->buffer[y][x] = color;
-// 		//free(color);
-// 		y++;
-// 	}
-// 	print_vertical_line(x, data);
-// }
 
 int	wall_hitpoint(t_data *data, int x)
 {
@@ -390,19 +303,11 @@ int	wall_hitpoint(t_data *data, int x)
 	wallx -= floor((wallx));
 	data->texx = (int)(wallx * (double)TEXWIDTH);
 	if (data->side == 0 && data->raydirx > 0)
-	{
-		// printf("side==0   texx before=%d\n", data->texx);
 		data->texx = TEXWIDTH - data->texx - 1;
-		// printf("side==0   texx after=%d\n", data->texx);
-	}
 	else if (data->side == 1 && data->raydiry < 0)
 	{
-		// printf("side==1   texx before=%d\n", data->texx);
 		data->texx = TEXWIDTH - data->texx - 1;
-		// printf("side==1   texx after=%d\n", data->texx);
 	}
-	// else
-	// 	printf("no modif   texx after=%d\n", data->texx);
 	data->wallx = wallx;
 	return (texnum);
 }
@@ -421,10 +326,6 @@ void	calculate_wall_height(t_data *data, int x)
 	data->draw_end = lineheight / 2 + h / 2;
 	if (data->draw_end >= h)
 		data->draw_end = h - 1;
-	//print_vertical_line(x, data, draw_start, draw_end);
-	data->texnum = wall_hitpoint(data, x);
-	// ft_trace_line(x, data, lineheight);
-	fill_buf(data, x, lineheight, h);
 }
 
 void	perform_dda(t_data *data, int x)
@@ -450,8 +351,6 @@ void	perform_dda(t_data *data, int x)
 		data->perpwalldist = (data->sidedistx - data->deltadistx);
 	else
 		data->perpwalldist = (data->sidedisty - data->deltadisty);
-	calculate_wall_height(data, x);
-
 }
 
 void	clear_buf(t_data *data)
@@ -486,12 +385,16 @@ void	calculate_ray_pos(t_data *data)
 		data->raydiry = data->diry + data->planey * data->camerax;
 		// calcul de la distance du prochain mur pour le rayon
 		ray_calculation(data);
+		calculate_step_init_sidedist(data); //calculate step and initial sideDist
 		perform_dda(data, x);
+		calculate_wall_height(data, x);
+		data->texnum = wall_hitpoint(data, x);
+		fill_buf(data, x, SCREENHEIGHT/ data->perpwalldist, SCREENHEIGHT);
+		print_vertical_line(x, data);
 		x++;
 	}
 	mlx_put_image_to_window(data->mlx, data->mlx_win, data->img, 0, 0);
 	hud_debug(data);
-
 }
 
 void	rotate(t_data *data, int direction)
@@ -509,7 +412,6 @@ void	rotate(t_data *data, int direction)
 
 void	walk_forward(t_data *data)
 {
-	// printf("dirx:%f\ndiry:%f\n", data->dirx, data->diry);
 	if (worldmap[(int)(data->posx + (data->dirx * MOVSPEED))][(int)(data->posy)] == 0)
 		data->posx += data->dirx * MOVSPEED;
 	if (worldmap[(int)(data->posx)][(int)(data->posy + (data->diry * MOVSPEED))] == 0) //Teamedfunsc3&
