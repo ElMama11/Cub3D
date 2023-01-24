@@ -81,6 +81,7 @@ typedef struct s_img
 	int		texwidth;
 	int		texheight;
 	int		endian;
+	unsigned int	*my_img;
 }				t_img;
 
 typedef struct s_data
@@ -120,9 +121,12 @@ typedef struct s_data
 	unsigned int	buffer[SCREENHEIGHT][SCREENWIDTH];
 	t_img	*img_tex;
 	int		texx;
+	int		texy;
 	int		draw_start;
 	int		draw_end;
 	int		texnum;
+
+	double	wallx;
 }			t_data;
 
 void	init(t_data *data);

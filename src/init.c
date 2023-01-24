@@ -11,6 +11,42 @@
 /* ************************************************************************** */
 
 #include "cube.h"
+// void		img_to_tab(t_img *texture)
+// {
+// 	int		size;
+// 	int		x;
+// 	int		y;
+// 	int		count;
+// 	int		color;
+
+// 	count = 0;
+// 	y = -1;
+// 	size = texture->texheight * texture->texwidth;
+// 	texture->my_img = (unsigned int*)malloc(sizeof(int) * size);
+// 	while (++y < texture->texheight)
+// 	{
+// 		x = -1;
+// 		while (++x < texture->texwidth)
+// 		{
+// 			color = texture->addr[(y * texture->line_length +
+// 					((x * texture->bits_per_pixel) / 8 + 2))];
+// 			color = (color << 8) | texture->addr[(y * texture->line_length +
+// 					((x * texture->bits_per_pixel) / 8 + 1))];
+// 			color = (color << 8) | texture->addr[(y * texture->line_length +
+// 					((x * texture->bits_per_pixel) / 8))];
+// 			texture->my_img[count] = color;
+// 			count++;
+// 		}
+// 	}
+// }
+
+void	init_textures(t_data *data)
+{
+	data->img_tex = malloc(sizeof(t_img) * 4);
+	data->img_tex[0].img = mlx_xpm_file_to_image(data->mlx, "textures/chair_shinji", &data->img_tex[0].texwidth, &data->img_tex[0].texheight);
+	data->img_tex[0].addr = mlx_get_data_addr(data->img_tex[0].img, &data->img_tex[0].bits_per_pixel, &data->img_tex[0].line_length, &data->img_tex[0].endian);
+	// img_to_tab(data->img_tex);
+}
 
 void	init(t_data *data)
 {
@@ -29,5 +65,6 @@ void	init(t_data *data)
 	data->draw_start = 0;
 	data->texnum = 0;
 	data->texx = 0;
+	init_textures(data);
 }
 
