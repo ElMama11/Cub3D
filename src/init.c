@@ -46,13 +46,13 @@ void	init_textures(t_data *data)
 
 	data->img_tex[0].img = mlx_xpm_file_to_image(data->mlx, "textures/chair_shinji", &data->img_tex[0].texwidth, &data->img_tex[0].texheight);
 	data->img_tex[0].addr = mlx_get_data_addr(data->img_tex[0].img, &data->img_tex[0].bits_per_pixel, &data->img_tex[0].line_length, &data->img_tex[0].endian);
-// 	data->img_tex[1].img = mlx_xpm_file_to_image(data->mlx, "textures/berserk", &data->img_tex[1].texwidth, &data->img_tex[1].texheight);
-// 	data->img_tex[1].addr = mlx_get_data_addr(data->img_tex[1].img, &data->img_tex[1].bits_per_pixel, &data->img_tex[1].line_length, &data->img_tex[1].endian);
-// 	data->img_tex[2].img = mlx_xpm_file_to_image(data->mlx, "textures/rei", &data->img_tex[2].texwidth, &data->img_tex[2].texheight);
-// 	data->img_tex[2].addr = mlx_get_data_addr(data->img_tex[2].img, &data->img_tex[2].bits_per_pixel, &data->img_tex[2].line_length, &data->img_tex[2].endian);
-// 	data->img_tex[3].img = mlx_xpm_file_to_image(data->mlx, "textures/sun", &data->img_tex[3].texwidth, &data->img_tex[3].texheight);
-// 	data->img_tex[3].addr = mlx_get_data_addr(data->img_tex[3].img, &data->img_tex[3].bits_per_pixel, &data->img_tex[3].line_length, &data->img_tex[3].endian);
-// 	// img_to_tab(data->img_tex);
+	data->img_tex[1].img = mlx_xpm_file_to_image(data->mlx, "textures/berserk", &data->img_tex[1].texwidth, &data->img_tex[1].texheight);
+	data->img_tex[1].addr = mlx_get_data_addr(data->img_tex[1].img, &data->img_tex[1].bits_per_pixel, &data->img_tex[1].line_length, &data->img_tex[1].endian);
+	data->img_tex[2].img = mlx_xpm_file_to_image(data->mlx, "textures/rei", &data->img_tex[2].texwidth, &data->img_tex[2].texheight);
+	data->img_tex[2].addr = mlx_get_data_addr(data->img_tex[2].img, &data->img_tex[2].bits_per_pixel, &data->img_tex[2].line_length, &data->img_tex[2].endian);
+	data->img_tex[3].img = mlx_xpm_file_to_image(data->mlx, "textures/sun", &data->img_tex[3].texwidth, &data->img_tex[3].texheight);
+	data->img_tex[3].addr = mlx_get_data_addr(data->img_tex[3].img, &data->img_tex[3].bits_per_pixel, &data->img_tex[3].line_length, &data->img_tex[3].endian);
+	// img_to_tab(data->img_tex);
 }
 
 void	init(t_data *data)
