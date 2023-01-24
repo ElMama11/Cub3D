@@ -226,26 +226,6 @@ void	print_vertical_line(int x, t_data *data)
 	}
 }
 
-int	wall_hitpoint(t_data *data, int x)
-{
-	int		texnum;
-	double	wallx;
-	
-	data->texx = 0;
-	texnum = 0;
-	if (data->side == 0)
-		wallx = data->posy + data->perpwalldist * data->raydirx;
-	else
-		wallx = data->posx + data->perpwalldist * data->raydirx;
-	wallx -= floor((wallx));
-	data->texx = (int)wallx * (double)TEXWIDTH;
-	if (data->side == 0 && data->raydirx > 0)
-		data->texx = TEXWIDTH - data->texx - 1;
-	if (data->side == 1 && data->raydiry < 0)
-		data->texx = TEXWIDTH - data->texx - 1;
-	return (texnum);
-}
-
 void	fill_buf(t_data *data, int x, int lineheight, int h)
 {
 	double			step;
@@ -278,13 +258,11 @@ void	fill_buf(t_data *data, int x, int lineheight, int h)
 	}
 }
 
-int	wall_hitpoint(t_data *data, int x)
+void	wall_hitpoint(t_data *data, int x)
 {
-	int		texnum;
 	double	wallx;
 	
 	data->texx = 0;
-	texnum = 0;
 	if (data->side == 0)
 		wallx = data->posy + data->perpwalldist * data->raydiry;
 	else
@@ -298,7 +276,6 @@ int	wall_hitpoint(t_data *data, int x)
 		data->texx = TEXWIDTH - data->texx - 1;
 	}
 	data->wallx = wallx;
-	return (texnum);
 }
 
 void	calculate_wall_height(t_data *data, int x)
@@ -361,23 +338,12 @@ void	clear_buf(t_data *data)
 	}
 }
 
-void	clear_buf(t_data *data)
+void	find_texnum(t_data *data)
 {
-	int	x;
-	int	y;
+	printf("side:%d\n", data->side);
+	printf("raydirx:%f\n", data->raydirx);
+	printf("raydiry:%f\n", data->raydiry);
 
-	x = 0;
-	y = 0;
-	while (y < SCREENHEIGHT)
-	{
-		while (x < SCREENWIDTH)
-		{
-			data->buffer[y][x] = 0;
-			x++;
-		}
-		y++;
-		x = 0;
-	}
 }
 
 void	calculate_ray_pos(t_data *data)
@@ -396,9 +362,10 @@ void	calculate_ray_pos(t_data *data)
 		calculate_step_init_sidedist(data); //calculate step and initial sideDist
 		perform_dda(data, x);
 		calculate_wall_height(data, x);
-		data->texnum = wall_hitpoint(data, x);
+		wall_hitpoint(data, x);
 		fill_buf(data, x, SCREENHEIGHT/ data->perpwalldist, SCREENHEIGHT);
 		print_vertical_line(x, data);
+		find_texnum(data);
 		x++;
 	}
 	mlx_put_image_to_window(data->mlx, data->mlx_win, data->img, 0, 0);
@@ -505,36 +472,14 @@ void img_init(t_data *data)
 			&data->line_length, &data->endian);
 }
 
-void	init_textures(t_data *data)
-{
-	data->img_tex = malloc(sizeof(t_img));
-	data->img_tex->texwidth = 128;
-	data->img_tex->texheight = 128;
-	data->img_tex->img = mlx_xpm_file_to_image(data->mlx, "chairshinji", &data->img_tex->texwidth, &data->img_tex->texheight);
-	// printf("%p\n", data->img_tex->img);
-	data->img_tex->addr = mlx_get_data_addr(data->img_tex->img, &data->img_tex->bits_per_pixel, &data->img_tex->line_length, &data->img_tex->endian);
-}
-
-// Teamedfunsc3&
-
 int main()
 {
 	t_data	data;
 
 	img_init(&data);
+	printf("??\n");
 	init(&data);
-	mlx_do_key_autorepeaton(data.mlx);
 	mlx_key_hook(data.mlx_win, action, &data);
-	calculate_ray_pos(&data);
 	// mlx_loop_hook(data.mlx, main_loop, &data);
-	printf("%p\n", data.img_tex->img);
-	// int	i = 0;
-	// while (i < 50)
-	// {
-	// 	line_lengtheep(1);
-	// 	walk(&data, 1, 0);
-	// 	calculate_ray_pos(&data);
-	// 	i++;
-	// }
 	mlx_loop(data.mlx);
 }

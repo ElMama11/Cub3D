@@ -119,7 +119,7 @@ typedef struct s_data
 	int		line_length;
 	int		endian;
 	unsigned int	buffer[SCREENHEIGHT][SCREENWIDTH];
-	t_img	*img_tex;
+	t_img	img_tex[4];
 	int		texx;
 	int		texy;
 	int		draw_start;
