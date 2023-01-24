@@ -68,4 +68,3 @@ void	init(t_data *data)
 	init_textures(data);
 }
 
-

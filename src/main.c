@@ -225,36 +225,25 @@ void	print_vertical_line(int x, t_data *data)
 		y++;
 	}
 }
-void	import_pixel_to_img(int x, int y, t_data *data, int color)
-{
-	if (x < SCREENWIDTH && y < SCREENHEIGHT)
-	{
-		data->addr[(y * data->line_length + ((x * data->bits_per_pixel) / 8))] = color;
-		data->addr[(y * data->line_length + ((x * data->bits_per_pixel) / 8 + 1))] = color >> 8;
-		data->addr[(y * data->line_length + ((x * data->bits_per_pixel) / 8 + 2))] = color >> 16;
-	}
-}
 
-void	ft_trace_line(int x, t_data *data, int lineheight)
+int	wall_hitpoint(t_data *data, int x)
 {
-	int	d;
-	int	y;
-	int	color;
-	int	pos;
-
-	d = 0;
-	y = data->draw_start;
-	while (y < data->draw_end)
-	{
-		d = y * 256 - SCREENHEIGHT * 128 + lineheight * 128;
-		data->texy = ((d * data->img_tex->texheight) / lineheight) / 256;
-		pos = (int)data->img_tex->texheight * data->texy + data->texx;
-		color = data->img_tex->my_img[pos];
-		// if (data->side == 1)
-		// 	color = (color >> 1) & 8355711;
-		import_pixel_to_img(x, y, data, color);
-		y++;
-	}
+	int		texnum;
+	double	wallx;
+	
+	data->texx = 0;
+	texnum = 0;
+	if (data->side == 0)
+		wallx = data->posy + data->perpwalldist * data->raydirx;
+	else
+		wallx = data->posx + data->perpwalldist * data->raydirx;
+	wallx -= floor((wallx));
+	data->texx = (int)wallx * (double)TEXWIDTH;
+	if (data->side == 0 && data->raydirx > 0)
+		data->texx = TEXWIDTH - data->texx - 1;
+	if (data->side == 1 && data->raydiry < 0)
+		data->texx = TEXWIDTH - data->texx - 1;
+	return (texnum);
 }
 
 void	fill_buf(t_data *data, int x, int lineheight, int h)
@@ -372,6 +361,25 @@ void	clear_buf(t_data *data)
 	}
 }
 
+void	clear_buf(t_data *data)
+{
+	int	x;
+	int	y;
+
+	x = 0;
+	y = 0;
+	while (y < SCREENHEIGHT)
+	{
+		while (x < SCREENWIDTH)
+		{
+			data->buffer[y][x] = 0;
+			x++;
+		}
+		y++;
+		x = 0;
+	}
+}
+
 void	calculate_ray_pos(t_data *data)
 {
 	int	x;
@@ -417,6 +425,7 @@ void	walk_forward(t_data *data)
 	if (worldmap[(int)(data->posx)][(int)(data->posy + (data->diry * MOVSPEED))] == 0) //Teamedfunsc3&
 		data->posy += data->diry * MOVSPEED;
 }
+
 void	walk_backward(t_data *data)
 {
 	if (worldmap[(int)(data->posx - (data->dirx * MOVSPEED))][(int)(data->posy)] == 0)
@@ -424,6 +433,7 @@ void	walk_backward(t_data *data)
 	if (worldmap[(int)(data->posx)][(int)(data->posy - (data->diry * MOVSPEED))] == 0) //Teamedfunsc3&
 		data->posy -= data->diry * MOVSPEED;
 }
+
 void	walk_left(t_data *data)
 {
 	double	tempdirx;
@@ -439,6 +449,7 @@ void	walk_left(t_data *data)
 	if (worldmap[(int)(data->posx)][(int)(data->posy + (tempdiry * MOVSPEED))] == 0) //Teamedfunsc3&
 		data->posy += tempdiry * MOVSPEED;
 }
+
 void	walk_right(t_data *data)
 {
 	double	tempdirx;
@@ -494,6 +505,18 @@ void img_init(t_data *data)
 			&data->line_length, &data->endian);
 }
 
+void	init_textures(t_data *data)
+{
+	data->img_tex = malloc(sizeof(t_img));
+	data->img_tex->texwidth = 128;
+	data->img_tex->texheight = 128;
+	data->img_tex->img = mlx_xpm_file_to_image(data->mlx, "chairshinji", &data->img_tex->texwidth, &data->img_tex->texheight);
+	// printf("%p\n", data->img_tex->img);
+	data->img_tex->addr = mlx_get_data_addr(data->img_tex->img, &data->img_tex->bits_per_pixel, &data->img_tex->line_length, &data->img_tex->endian);
+}
+
+// Teamedfunsc3&
+
 int main()
 {
 	t_data	data;
@@ -502,8 +525,9 @@ int main()
 	init(&data);
 	mlx_do_key_autorepeaton(data.mlx);
 	mlx_key_hook(data.mlx_win, action, &data);
-	// calculate_ray_pos(&data);
-	mlx_loop_hook(data.mlx, main_loop, &data);
+	calculate_ray_pos(&data);
+	// mlx_loop_hook(data.mlx, main_loop, &data);
+	printf("%p\n", data.img_tex->img);
 	// int	i = 0;
 	// while (i < 50)
 	// {
