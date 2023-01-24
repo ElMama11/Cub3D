@@ -130,25 +130,32 @@ char	*ft_itoa(int n)
 	return (str_output);
 }
 
-void	hud_debug(t_data *data)
-{
-	char *x = ft_itoa(data->posx);
-	char *y = ft_itoa(data->posy);
-	mlx_string_put(data->mlx, data->mlx_win, 10, 10, 0x00fffff, "posx:");
-	mlx_string_put(data->mlx, data->mlx_win, 80, 10, 0x00fffff, x);
-	mlx_string_put(data->mlx, data->mlx_win, 10, 30, 0x00fffff, "posy:");
-	mlx_string_put(data->mlx, data->mlx_win, 80, 30, 0x00fffff, y);
-}
+// void	hud_debug(t_data *data)
+// {
+// 	char *x = ft_itoa(data->posx);
+// 	char *y = ft_itoa(data->posy);
+// 	mlx_string_put(data->mlx, data->mlx_win, 10, 10, 0x00fffff, "posx:");
+// 	mlx_string_put(data->mlx, data->mlx_win, 80, 10, 0x00fffff, x);
+// 	mlx_string_put(data->mlx, data->mlx_win, 10, 30, 0x00fffff, "posy:");
+// 	mlx_string_put(data->mlx, data->mlx_win, 80, 30, 0x00fffff, y);
+// }
 
 void	free_all(t_data *data)
 {
 	(void)data;
 }
 
-void	close_window(t_data *data)
+int	close_window(t_data *data)
 {
+	mlx_destroy_image(data->mlx, data->img_tex[0].img);
+	mlx_destroy_image(data->mlx, data->img_tex[1].img);
+	mlx_destroy_image(data->mlx, data->img_tex[2].img);
+	mlx_destroy_image(data->mlx, data->img_tex[3].img);
+	mlx_clear_window(data->mlx, data->mlx_win);
+	mlx_destroy_window(data->mlx, data->mlx_win);
 	free_all(data);
 	exit(0);
+	return (0);
 }
 
 double	ft_abs(double x)
@@ -243,13 +250,13 @@ void	fill_buf(t_data *data, int x, int lineheight, int h)
 		{
 			texy = (int)texpos & (TEXHEIGHT - 1);
 			texpos += step;
-			color = (unsigned int *)(data->img_tex[0].addr + ((texy * data->img_tex[0].line_length) + ((int)data->texx * (data->img_tex[0].bits_per_pixel / 8))));
+			color = (unsigned int *)(data->img_tex[data->texnum].addr + ((texy * data->img_tex[data->texnum].line_length) + ((int)data->texx * (data->img_tex[data->texnum].bits_per_pixel / 8))));
 			data->buffer[y][x] = *color;
 			y++;
 		}
-		color = malloc(sizeof(char) * 3);
+		color = malloc(sizeof(char) * 1);
 		if (y > SCREENHEIGHT / 2)
-			*color = 0x0;
+			*color = 0x5426f;
 		else
 			*color = (unsigned int)0xff4500;
 		data->buffer[y][x] = *color;
@@ -264,9 +271,30 @@ void	wall_hitpoint(t_data *data, int x)
 	
 	data->texx = 0;
 	if (data->side == 0)
+	{
+		if(data->raydirx < 0)
+		{
+			data->texnum = 0;
+		}
+		else
+		{
+			data->texnum = 1;
+		}
 		wallx = data->posy + data->perpwalldist * data->raydiry;
+	}
 	else
+	{
+		if(data->raydiry < 0)
+		{
+			data->texnum = 2;
+
+		}
+		else
+		{
+			data->texnum = 3;
+		}
 		wallx = data->posx + data->perpwalldist * data->raydirx;
+	}
 	wallx -= floor((wallx));
 	data->texx = (int)(wallx * (double)TEXWIDTH);
 	if (data->side == 0 && data->raydirx > 0)
@@ -338,14 +366,6 @@ void	clear_buf(t_data *data)
 	}
 }
 
-void	find_texnum(t_data *data)
-{
-	printf("side:%d\n", data->side);
-	printf("raydirx:%f\n", data->raydirx);
-	printf("raydiry:%f\n", data->raydiry);
-
-}
-
 void	calculate_ray_pos(t_data *data)
 {
 	int	x;
@@ -365,11 +385,9 @@ void	calculate_ray_pos(t_data *data)
 		wall_hitpoint(data, x);
 		fill_buf(data, x, SCREENHEIGHT/ data->perpwalldist, SCREENHEIGHT);
 		print_vertical_line(x, data);
-		find_texnum(data);
 		x++;
 	}
 	mlx_put_image_to_window(data->mlx, data->mlx_win, data->img, 0, 0);
-	hud_debug(data);
 }
 
 void	rotate(t_data *data, int direction)
@@ -477,9 +495,9 @@ int main()
 	t_data	data;
 
 	img_init(&data);
-	printf("??\n");
 	init(&data);
 	mlx_key_hook(data.mlx_win, action, &data);
+	mlx_hook(data.mlx_win, 17, 0L, close_window, &data);
 	// mlx_loop_hook(data.mlx, main_loop, &data);
 	mlx_loop(data.mlx);
 }

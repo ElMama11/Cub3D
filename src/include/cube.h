@@ -37,7 +37,7 @@
 # define KEY_S 115
 # define KEY_D 100
 # define KEY_A 113
-# define ECHAP 1
+# define ECHAP 65307
 
 // Teamedfunsc3&
 
