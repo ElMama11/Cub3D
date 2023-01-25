@@ -235,9 +235,9 @@ void	fill_buf(t_data *data, int x, int lineheight, int h)
 		}
 		color = malloc(sizeof(char) * 1);
 		if (y > SCREENHEIGHT / 2)
-			*color = data->ceiling;
-		else
 			*color = data->floor;
+		else
+			*color = data->ceiling;
 		data->buffer[y][x] = *color;
 		free(color);
 		y++;
@@ -479,10 +479,7 @@ int main(int ac, char **av)
 		write(2, "Error\nMap is missing\n", 22);
 		exit(EXIT_FAILURE);
 	}
-	printf("LA\n");
     path_tex = parsing(&data, ac, av);
-	printf("1:%s\n2:%s\n3:%s\n4:%s\n", path_tex[0],path_tex[1],path_tex[2],path_tex[3]);
-	printf("floor=%u ceiling=%u\n", data.floor, data.ceiling);
 	if (path_tex == 0)
 	{
 		printf("Error : parsing\n");

@@ -1,5 +1,5 @@
 NAME = cube
-GCCF = gcc -g3 #-Wall -Werror -Wextra
+GCCF = gcc -g3 -Wall -Werror -Wextra
 GREEN       = \033[32m
 RED         = \033[31m
 DEFAULT     = \033[37m

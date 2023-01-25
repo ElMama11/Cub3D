@@ -143,6 +143,26 @@ int	get_ceilor_floor_color(char *buf, t_data *data, char c)
 	return (1);
 }
 
+char	*ft_strdup_custom(const char *s)
+{
+	int		i;
+	int		i2;
+	char	*dest;
+
+	i = 0;
+	i2 = ft_strlen(s);
+	if (!(dest = (char*)malloc(sizeof(*dest) * i2 + 1)))
+		return (NULL);
+	while (s[i] && s[i] != ' ' && s[i] != '\n')
+	{
+		dest[i] = s[i];
+		i++;
+	}
+	dest[i] = '\0';
+	return (dest);
+}
+
+
 char	**get_path_name(char *buffer, char **path_tex, int tex_num)
 {
 	buffer = skip_space(buffer);
@@ -150,7 +170,7 @@ char	**get_path_name(char *buffer, char **path_tex, int tex_num)
 	{
 		if (path_tex[tex_num])
 			return (free_tab_tex(path_tex));
-		path_tex[tex_num] = ft_strdup(buffer + 2);				
+		path_tex[tex_num] = ft_strdup_custom(buffer + 2);				
 	}
 	return(path_tex);
 }
