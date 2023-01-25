@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mverger <mverger@42lyon.fr>                +#+  +:+       +#+         #
+#    By: jthibaul <jthibaul@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/10 15:10:45 by mverger           #+#    #+#              #
-#    Updated: 2023/01/09 16:52:14 by mverger          ###   ########.fr        #
+#    Updated: 2022/11/24 04:23:15 by jthibaul         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,10 @@ SRC=ft_atoi.c ft_bzero.c ft_calloc.c ft_isalnum.c \
 	ft_lstmap.c ft_lstnew.c ft_lstsize.c \
 	ft_tablen.c ft_free_tab.c ft_memallocexit.c ft_atol.c \
 	ft_lstsecondlast.c ft_printf.c ft_printf_utils.c ft_strstr.c\
-	ft_check_atoi.c
+	ft_wait.c\
+	ft_str_is_digit.c ft_str_is_alpha.c ft_str_is_signed_num.c\
+	ft_check_atoi.c ft_atof.c get_next_line.c			\
+	get_next_line_utils.c
 OBJ= $(SRC:.c=.o)
 
 %.o: %.c $(HEADER)

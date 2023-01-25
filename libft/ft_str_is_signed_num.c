@@ -1,35 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_str_is_signed_num.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jthibaul <jthibaul@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/02 16:54:54 by mverger           #+#    #+#             */
-/*   Updated: 2022/11/23 06:39:19 by jthibaul         ###   ########.fr       */
+/*   Created: 2022/04/13 08:56:04 by jthibaul          #+#    #+#             */
+/*   Updated: 2022/04/13 09:30:04 by jthibaul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_strlen(const char *s)
+int	ft_str_is_signed_num(char *src)
 {
-	size_t	i;
+	int	i;
 
 	i = 0;
-	if (!s)
-		return (0);
-	while (s[i])
+	if (src[0] == '-' || src[0] == '+')
 		i++;
-	return (i);
+	while (src && src[i])
+	{
+		if (! (src[i] >= 'a' && src[i] <= 'z')
+				|| (src[i] >= 'A' && src[i] <= 'Z'))
+			return (0);
+		i++;
+	}
+	return (1);
 }
-
-/*int main (void)
-{
-    char *c = "loop";
-
-    printf("ft  %d\n",ft_strlen(c));
-    printf("vrai  %lu",strlen(c));
-
-    return (0); 
-}*/

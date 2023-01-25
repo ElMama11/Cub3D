@@ -1,35 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_wait.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jthibaul <jthibaul@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/02 16:54:54 by mverger           #+#    #+#             */
-/*   Updated: 2022/11/23 06:39:19 by jthibaul         ###   ########.fr       */
+/*   Created: 2022/04/13 08:14:33 by jthibaul          #+#    #+#             */
+/*   Updated: 2022/04/26 07:21:21 by jthibaul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_strlen(const char *s)
+void	ft_wait(int *val, int time)
 {
-	size_t	i;
-
-	i = 0;
-	if (!s)
-		return (0);
-	while (s[i])
-		i++;
-	return (i);
+	while (!*val)
+	{
+		usleep(time);
+	}
 }
-
-/*int main (void)
-{
-    char *c = "loop";
-
-    printf("ft  %d\n",ft_strlen(c));
-    printf("vrai  %lu",strlen(c));
-
-    return (0); 
-}*/

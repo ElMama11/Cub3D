@@ -6,7 +6,7 @@
 /*   By: mverger <mverger@42lyon.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 16:41:53 by jthibaul          #+#    #+#             */
-/*   Updated: 2023/01/19 17:41:55 by mverger          ###   ########.fr       */
+/*   Updated: 2023/01/25 17:59:49 by mverger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,27 +38,6 @@ int worldmap[MAPWIDTH][MAPHEIGHT]=
 {1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
 {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
 };
-
-char	*ft_strdup(const char *s1)
-{
-	int		i;
-	char	*str_malloc;
-
-	i = 0;
-	while (s1[i])
-		i++;
-	str_malloc = (char *) malloc((i + 1) * sizeof(char));
-	if (str_malloc == NULL)
-		return (NULL);
-	i = 0;
-	while (s1[i])
-	{
-		str_malloc[i] = s1[i];
-		i++;
-	}
-	str_malloc[i] = '\0';
-	return (str_malloc);
-}
 
 static int	ft_count_digit(int n)
 {
@@ -256,9 +235,9 @@ void	fill_buf(t_data *data, int x, int lineheight, int h)
 		}
 		color = malloc(sizeof(char) * 1);
 		if (y > SCREENHEIGHT / 2)
-			*color = 0x5426f;
+			*color = data->ceiling;
 		else
-			*color = (unsigned int)0xff4500;
+			*color = data->floor;
 		data->buffer[y][x] = *color;
 		free(color);
 		y++;
@@ -490,12 +469,27 @@ void img_init(t_data *data)
 			&data->line_length, &data->endian);
 }
 
-int main()
+int main(int ac, char **av)
 {
 	t_data	data;
+	char **path_tex;
 
+	if (ac != 2)
+	{
+		write(2, "Error\nMap is missing\n", 22);
+		exit(EXIT_FAILURE);
+	}
+	printf("LA\n");
+    path_tex = parsing(&data, ac, av);
+	printf("1:%s\n2:%s\n3:%s\n4:%s\n", path_tex[0],path_tex[1],path_tex[2],path_tex[3]);
+	printf("floor=%u ceiling=%u\n", data.floor, data.ceiling);
+	if (path_tex == 0)
+	{
+		printf("Error : parsing\n");
+		return (0);
+	}
 	img_init(&data);
-	init(&data);
+	init(&data, path_tex);
 	mlx_key_hook(data.mlx_win, action, &data);
 	mlx_hook(data.mlx_win, 17, 0L, close_window, &data);
 	// mlx_loop_hook(data.mlx, main_loop, &data);

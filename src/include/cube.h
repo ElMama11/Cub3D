@@ -6,7 +6,7 @@
 /*   By: mverger <mverger@42lyon.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 15:05:30 by mverger           #+#    #+#             */
-/*   Updated: 2023/01/19 17:42:12 by mverger          ###   ########.fr       */
+/*   Updated: 2023/01/25 17:58:33 by mverger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,14 @@
 # define CUBE_H
 
 # include "../../mlx_linux/mlx.h"
+# include "../../libft/libft.h"
 # include <math.h>
 # include <stdlib.h>
 # include <stdio.h>
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <fcntl.h>
+# include <unistd.h>
  
 # define SCREENWIDTH 800
 # define SCREENHEIGHT 600
@@ -127,11 +132,17 @@ typedef struct s_data
 	int		texnum;
 
 	double	wallx;
+	unsigned int	floor;
+	unsigned int	ceiling;
 }			t_data;
 
-void	init(t_data *data);
+void	init(t_data *data, char **path_tex);
 void	free_all(t_data *data);
 /* hook.c */
 int		action(int keycode, t_data *data);
 void	set_hook(t_data *data);
+
+/* parsing */
+char **parsing(t_data *data, int ac, char **av);
+
 #endif

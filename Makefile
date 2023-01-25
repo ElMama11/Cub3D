@@ -9,14 +9,15 @@ INCLUDE_PATH=include/
 DEP = Makefile src/$(INCLUDE_PATH)/cube.h
 SRC =   main.c	\
 		hook.c	\
-		init.c
+		init.c	\
+		parsing.c
 LIBFT = libft/libft.a
 MLX = -Lmlx_linux -lmlx_Linux -L /usr/lib -Imlx_linux -lXext -lX11 -lm -lz
 HEAD = -I ./src/$(INCLUDE_PATH)/ -I /usr/include
 OBJ = $(patsubst %.c,$(PATHOBJ)/%.o,$(SRC))
 ECHO = echo
 
-all: $(NAME)
+all: | libft $(NAME)
 
 libft:
 	@make -C libft/
@@ -26,7 +27,7 @@ $(PATHOBJ):
 
 $(NAME): $(PATHOBJ) $(addprefix $(PATHSRC)/,$(SRC)) $(OBJ)
 	@$(ECHO) "\r$(GREEN) The .o from $(NAME) are compiled.$(DEFAULT)"
-	@$(GCCF) $(OBJ) $(MLX) -o $(NAME)
+	@$(GCCF) $(OBJ) $(LIBFT) $(MLX) -o $(NAME)
 	@$(ECHO) "$(GREEN)$(NAME)$(DEFAULT) created."
 
 $(PATHOBJ)/%.o: $(PATHSRC)/%.c $(DEP)
@@ -35,10 +36,12 @@ $(PATHOBJ)/%.o: $(PATHSRC)/%.c $(DEP)
 
 clean:
 	@$(ECHO) "All $(RED).o$(DEFAULT) are now deleted for $(NAME)."
+	@make clean -C ./libft/
 	@rm -rf $(PATHOBJ)
 
 fclean: clean
 	@$(ECHO) "$(RED)$(NAME)$(DEFAULT) is now deleted."
+	@make fclean -C ./libft/
 	@rm -rf $(NAME)
 
 re: fclean all
