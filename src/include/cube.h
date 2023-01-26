@@ -6,7 +6,7 @@
 /*   By: mverger <mverger@42lyon.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 15:05:30 by mverger           #+#    #+#             */
-/*   Updated: 2023/01/26 17:16:26 by mverger          ###   ########.fr       */
+/*   Updated: 2023/01/26 17:56:58 by mverger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,6 +149,6 @@ int		action(int keycode, t_data *data);
 void	set_hook(t_data *data);
 
 /* parsing */
-char **parsing(t_data *data, int ac, char **av);
+char **parsing(t_data *data, char **av);
 
 #endif

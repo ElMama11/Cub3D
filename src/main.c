@@ -6,7 +6,7 @@
 /*   By: mverger <mverger@42lyon.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 16:41:53 by jthibaul          #+#    #+#             */
-/*   Updated: 2023/01/25 17:59:49 by mverger          ###   ########.fr       */
+/*   Updated: 2023/01/26 18:05:18 by mverger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,7 +244,7 @@ void	fill_buf(t_data *data, int x, int lineheight, int h)
 	}
 }
 
-void	wall_hitpoint(t_data *data, int x)
+void	wall_hitpoint(t_data *data)
 {
 	double	wallx;
 	
@@ -285,7 +285,7 @@ void	wall_hitpoint(t_data *data, int x)
 	data->wallx = wallx;
 }
 
-void	calculate_wall_height(t_data *data, int x)
+void	calculate_wall_height(t_data *data)
 {
 	int	lineheight;
 	int	h;
@@ -301,7 +301,7 @@ void	calculate_wall_height(t_data *data, int x)
 		data->draw_end = h - 1;
 }
 
-void	perform_dda(t_data *data, int x)
+void	perform_dda(t_data *data)
 {
 	while (data->hit == 0)
 	{
@@ -359,9 +359,9 @@ void	calculate_ray_pos(t_data *data)
 		// calcul de la distance du prochain mur pour le rayon
 		ray_calculation(data);
 		calculate_step_init_sidedist(data); //calculate step and initial sideDist
-		perform_dda(data, x);
-		calculate_wall_height(data, x);
-		wall_hitpoint(data, x);
+		perform_dda(data);
+		calculate_wall_height(data);
+		wall_hitpoint(data);
 		fill_buf(data, x, SCREENHEIGHT/ data->perpwalldist, SCREENHEIGHT);
 		print_vertical_line(x, data);
 		x++;
@@ -453,6 +453,7 @@ int	action(int keycode, t_data *data)
 	if(keycode == KEY_LEFT)
 		rotate(data, 1);
 	main_loop(data);
+	return (0);
 }
 
 int	done()
@@ -479,16 +480,23 @@ int main(int ac, char **av)
 		write(2, "Error\nMap is missing\n", 22);
 		exit(EXIT_FAILURE);
 	}
-    path_tex = parsing(&data, ac, av);
+    path_tex = parsing(&data, av);
 	if (path_tex == 0)
 	{
 		printf("Error : parsing\n");
 		return (0);
 	}
+	for(int i = 0; i < data.map_sizey; i++)
+	{
+		write(1, data.worldmap[i], data.map_sizex);
+		write(1, "\n", 1);
+	}
+	return (0);
 	img_init(&data);
 	init(&data, path_tex);
 	mlx_key_hook(data.mlx_win, action, &data);
 	mlx_hook(data.mlx_win, 17, 0L, close_window, &data);
 	// mlx_loop_hook(data.mlx, main_loop, &data);
 	mlx_loop(data.mlx);
+	return (0);
 }

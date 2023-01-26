@@ -6,7 +6,7 @@
 /*   By: mverger <mverger@42lyon.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 15:33:14 by mverger           #+#    #+#             */
-/*   Updated: 2023/01/26 17:38:37 by mverger          ###   ########.fr       */
+/*   Updated: 2023/01/26 18:00:40 by mverger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,8 +146,7 @@ int	get_ceilor_floor_color(char *buf, t_data *data, char c)
 		data->check_ceiling = 1;
 		data->ceiling = create_trgb(0, r, g, b);
 	}
-	else
-		
+	//else
 	return (1);
 }
 
@@ -187,13 +186,13 @@ char **check_name_color(t_data *data, char *buffer, char **path_tex)
 {
 	if (!ft_strncmp(buffer, "NO ", 3))
 		path_tex = get_path_name(buffer + 3, path_tex, 0);
-	if (!ft_strncmp(buffer, "SO ", 3))
+	else if (!ft_strncmp(buffer, "SO ", 3))
 		path_tex = get_path_name(buffer + 3, path_tex, 1);
-	if (!ft_strncmp(buffer, "WE ", 3))
+	else if (!ft_strncmp(buffer, "WE ", 3))
 		path_tex = get_path_name(buffer + 3, path_tex, 2);
-	if (!ft_strncmp(buffer, "EA ", 3))
+	else if (!ft_strncmp(buffer, "EA ", 3))
 		path_tex = get_path_name(buffer + 3, path_tex, 3);
-	if (!ft_strncmp(buffer, "F ", 2) || !ft_strncmp(buffer, "C ", 2))
+	else if (!ft_strncmp(buffer, "F ", 2) || !ft_strncmp(buffer, "C ", 2))
 	{
 		if (!get_ceilor_floor_color(buffer + 2, data, *buffer))
 		{
@@ -245,9 +244,6 @@ int	check_all_tex_color(char **path_tex, t_data *data)
 
 int	line_is_empty(char *str)
 {
-	int	i;
-
-	i = 0;
 	if (*str == '\n')
 		return (1);
 	return (0);
@@ -259,6 +255,7 @@ int	check_first_line(char *str)
 	int	is_one_one;
 	
 	is_one_one = 0;
+	(void)is_one_one;
 	i = 0;
 	while (str[i] != '\n')
 	{
@@ -287,7 +284,7 @@ void	malloc_map(t_data *data, char *buffer, int mapfd)
 	i = 0;
 	y = 0;
 	x = 0;
-	while (*buffer != '\n' && *buffer != '\0')
+	while (buffer != 0 && *buffer != '\n')
 	{
 		while (buffer[i])
 			i++;
@@ -327,7 +324,7 @@ int	fill_map(t_data *data, int mapfd, int mapline)
 		i++;
 	}
 	i = 0;
-	while (*buffer != '\n' && *buffer != '\0')
+	while (buffer != 0 && *buffer != '\n')
 	{
 		while (buffer[i] && buffer[i] != '\n')
 		{
@@ -363,7 +360,7 @@ int	get_map(t_data *data, char *buffer, int mapfd, int mapline)
 }
 
 
-char **parsing(t_data *data, int ac, char **av)
+char **parsing(t_data *data, char **av)
 {
 	int		mapfd;
 	char	*buffer;                 
