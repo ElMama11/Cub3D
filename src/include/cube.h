@@ -6,7 +6,7 @@
 /*   By: mverger <mverger@42lyon.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 15:05:30 by mverger           #+#    #+#             */
-/*   Updated: 2023/01/25 17:58:33 by mverger          ###   ########.fr       */
+/*   Updated: 2023/01/26 17:16:26 by mverger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,10 +130,16 @@ typedef struct s_data
 	int		draw_start;
 	int		draw_end;
 	int		texnum;
-
+	int		tex_color_initialized;
+	int		check_floor;
+	int		check_ceiling;
+	char	**worldmap;
 	double	wallx;
 	unsigned int	floor;
 	unsigned int	ceiling;
+	int		map_sizex;
+	int		map_sizey;
+	char	*path_name;
 }			t_data;
 
 void	init(t_data *data, char **path_tex);
