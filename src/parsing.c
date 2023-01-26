@@ -6,7 +6,7 @@
 /*   By: mverger <mverger@42lyon.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 15:33:14 by mverger           #+#    #+#             */
-/*   Updated: 2023/01/25 17:52:02 by mverger          ###   ########.fr       */
+/*   Updated: 2023/01/26 17:38:37 by mverger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,10 +136,18 @@ int	get_ceilor_floor_color(char *buf, t_data *data, char c)
 		return (0);
 	while (ft_isdigit(*buf))
 		buf++;
-	if (c == 'F')
+	if (c == 'F' && data->check_floor != 1)
+	{
+		data->check_floor = 1;
 		data->floor = create_trgb(0, r, g, b);
-	if (c == 'C')
+	}
+	else if (c == 'C' && data->check_ceiling != 1)
+	{
+		data->check_ceiling = 1;
 		data->ceiling = create_trgb(0, r, g, b);
+	}
+	else
+		
 	return (1);
 }
 
@@ -168,12 +176,18 @@ char **check_name_color(t_data *data, char *buffer, char **path_tex)
 	if (!ft_strncmp(buffer, "F ", 2) || !ft_strncmp(buffer, "C ", 2))
 	{
 		if (!get_ceilor_floor_color(buffer + 2, data, *buffer))
+		{
+			printf("Error\nBad syntax\n");		
 			return (free_tab_tex(path_tex));
+		}
 	}
-	// else
-	// {
+	else
+	{
+		printf("Error\nBad entries\n");			
+	}
+	if (path_tex == 0)
+		printf("Error\nDouble cardinal direction or color\n");
 		
-	// }
 	return (path_tex);	
 }
 
@@ -202,20 +216,152 @@ char **get_path_tex_color(t_data *data, char *buffer, char **path_tex)
 
 }
 
+int	check_all_tex_color(char **path_tex, t_data *data)
+{
+	if (data->check_floor == 1 && data->check_ceiling == 1 && path_tex[0] != NULL && path_tex[1] != NULL && path_tex[2] != NULL && path_tex[3] != NULL)
+		return (1);
+	return (0);
+}
+
+int	line_is_empty(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (*str == '\n')
+		return (1);
+	return (0);
+}
+
+int	check_first_line(char *str)
+{
+	int	i;
+	int	is_one_one;
+	
+	is_one_one = 0;
+	i = 0;
+	while (str[i] != '\n')
+	{
+		
+		if (str[i] == ' ' || str[i] == '1')
+		{
+			if (str[i] == '1')
+				is_one_one = 1;
+		}
+		else
+		{
+			printf("Error\nMap is not valid\n");
+			return (0);
+		}
+		i++;
+	}
+	return (1);
+}
+
+void	malloc_map(t_data *data, char *buffer, int mapfd)
+{
+	int	i;
+	int	x;
+	int	y;
+
+	i = 0;
+	y = 0;
+	x = 0;
+	while (*buffer != '\n' && *buffer != '\0')
+	{
+		while (buffer[i])
+			i++;
+		if (i > x)
+			x = i;
+		y++;
+		free (buffer);
+		buffer = get_next_line(mapfd);		
+	}
+	data->map_sizex = x;
+	data->map_sizey = y;
+	data->worldmap = calloc(sizeof(char *), y);
+	i = 0;
+	while (i < y)
+	{
+		data->worldmap[i] = calloc(sizeof(char), x);
+		i++;
+	}
+}
+
+int	fill_map(t_data *data, int mapfd, int mapline)
+{
+	char	*buffer;
+	int		i;
+	int		x;
+
+	x = 0;
+	i = 0;
+	buffer = 0;
+	close(mapfd);
+	mapfd = open(data->path_name, O_RDONLY);
+	while(i < mapline)
+	{
+		if (buffer)
+			free(buffer);
+		buffer = get_next_line(mapfd);
+		i++;
+	}
+	i = 0;
+	while (*buffer != '\n' && *buffer != '\0')
+	{
+		while (buffer[i] && buffer[i] != '\n')
+		{
+			data->worldmap[x][i] = buffer[i];
+			i++;
+		}
+		while (i < data->map_sizex)
+		{
+			data->worldmap[x][i] = ' ';
+			i++;
+		}
+		free (buffer);
+		buffer = get_next_line(mapfd);		
+		x++;
+		i = 0;
+	}
+	return (mapfd);
+}
+
+int	get_map(t_data *data, char *buffer, int mapfd, int mapline)
+{
+	
+	while (line_is_empty(buffer))
+	{
+		buffer = get_next_line(mapfd);
+		mapline++;
+	}
+	if (!check_first_line(buffer))
+		return (0);
+	malloc_map(data, buffer, mapfd);
+	mapfd = fill_map(data, mapfd, mapline);
+	return (mapfd);
+}
+
+
 char **parsing(t_data *data, int ac, char **av)
 {
 	int		mapfd;
 	char	*buffer;                 
 	char	**path_tex;
+	int		map_line;
 
+	map_line = 1;
 	mapfd = open(av[1], O_RDONLY);
 	buffer = get_next_line(mapfd);
+	data->check_floor = 0;
+	data->check_ceiling = 0;
+	data->path_name = av[1];
 	check_filename(mapfd, av);
 	path_tex = ft_calloc(sizeof(char *), 4);
 	if (path_tex == 0)
 		return (0);
-	while (buffer != 0)
-	{	
+	while (!check_all_tex_color(path_tex, data) && *buffer != 0)
+	{
 		path_tex = get_path_tex_color(data, buffer, path_tex);
 		if (path_tex == 0)
 		{
@@ -226,8 +372,19 @@ char **parsing(t_data *data, int ac, char **av)
 		if (!buffer)
 			free(buffer);
 		buffer = get_next_line(mapfd);
+		map_line++;
+	}
+	if (buffer == 0 || path_tex == 0 || !check_all_tex_color(path_tex, data))
+	{
+		if (buffer == 0)
+			printf("Error\nMap is missing\n");
+		else
+			printf("Error\nTextures or floor/ceiling color is missing\n");
+		return (NULL);
 	}
 	if (!buffer)
 		free(buffer);
+	mapfd = get_map(data, buffer, mapfd, map_line);
+	close(mapfd);
 	return (path_tex);
 }
