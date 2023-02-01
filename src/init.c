@@ -55,12 +55,6 @@ void	init_textures(t_data *data, char **path_tex)
 
 void	init(t_data *data, char **path_tex)
 {
-	data->posx = 4;
-	data->posy = 15;
-	data->dirx = -1;
-	data->diry = 0;
-	data->planex = 0;
-	data->planey = 0.66;
 	data->time = 0;
 	data->oldtime = 0;
 	data->camerax = 0;

@@ -428,6 +428,7 @@ void	walk_right(t_data *data)
 		data->posx += tempdirx * MOVSPEED;
 	if (data->worldmap[(int)(data->posx)][(int)(data->posy + (tempdiry * MOVSPEED))] == '0')
 		data->posy += tempdiry * MOVSPEED;
+
 }
 
 int main_loop(t_data *data)
@@ -437,7 +438,7 @@ int main_loop(t_data *data)
 }
 
 int	action(int keycode, t_data *data)
-{	
+{
 	if(keycode == ECHAP)
 		close_window(data);
 	if(keycode == KEY_W)
@@ -475,6 +476,7 @@ int main(int ac, char **av)
 	t_data	data;
 	char **path_tex;
 
+	(void)av;
 	if (ac != 2)
 	{
 		write(2, "Error\nMap is missing\n", 22);
@@ -482,20 +484,17 @@ int main(int ac, char **av)
 	}
     path_tex = parsing(&data, av);
 	if (path_tex == 0)
-	{
-		printf("Error : parsing\n");
 		return (0);
-	}
-	for(int i = 0; i < data.map_sizey; i++)
-	{
-		write(1, data.worldmap[i], data.map_sizex);
-		write(1, "\n", 1);
-	}
+	// for(int i = 0; i < data.map_sizey; i++)
+	// {
+	// 	write(1, data.worldmap[i], data.map_sizex);
+	// 	write(1, "\n", 1);
+	// }
 	img_init(&data);
 	init(&data, path_tex);
 	mlx_key_hook(data.mlx_win, action, &data);
 	mlx_hook(data.mlx_win, 17, 0L, close_window, &data);
-	//mlx_loop_hook(data.mlx, main_loop, &data);
+	mlx_loop_hook(data.mlx, main_loop, &data);
 	mlx_loop(data.mlx);
 	return (0);
 }

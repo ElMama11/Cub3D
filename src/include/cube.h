@@ -33,7 +33,7 @@
 # define TEXHEIGHT 128
 
 # define MOVSPEED 0.7
-# define ROTSPEED 3.14/12
+# define ROTSPEED 3.14/8
 
 /* KEY */
 # define KEY_LEFT 65361
@@ -150,5 +150,7 @@ void	set_hook(t_data *data);
 
 /* parsing */
 char **parsing(t_data *data, char **av);
+int check_map(t_data *data);
+
 
 #endif

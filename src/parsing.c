@@ -202,11 +202,14 @@ char **check_name_color(t_data *data, char *buffer, char **path_tex)
 	}
 	else
 	{
-		printf("Error\nBad entries\n");			
+		printf("Error\nBad entries\n");
+		return (free_tab_tex(path_tex));
 	}
 	if (path_tex == 0)
+	{
 		printf("Error\nDouble cardinal direction or color\n");
-		
+		return (free_tab_tex(path_tex));
+	}
 	return (path_tex);	
 }
 
@@ -403,5 +406,11 @@ char **parsing(t_data *data, char **av)
 		free(buffer);
 	mapfd = get_map(data, buffer, mapfd, map_line);
 	close(mapfd);
+	if (!check_map(data))
+		return (NULL);
+	// data->dirx = 1;
+	// data->diry = 0;
+	// data->posx = 1;
+	// data->posy = 9;
 	return (path_tex);
 }

@@ -7,9 +7,10 @@ PATHOBJ = obj/
 PATHSRC = src/
 INCLUDE_PATH=include/
 DEP = Makefile src/$(INCLUDE_PATH)/cube.h
-SRC =   main.c	\
-		hook.c	\
-		init.c	\
+SRC =   main.c		\
+		hook.c		\
+		init.c		\
+		check_map.c	\
 		parsing.c
 LIBFT = libft/libft.a
 MLX = -Lmlx_linux -lmlx_Linux -L /usr/lib -Imlx_linux -lXext -lX11 -lm -lz
