@@ -6,38 +6,38 @@
 /*   By: mverger <mverger@42lyon.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 16:41:53 by jthibaul          #+#    #+#             */
-/*   Updated: 2023/01/26 18:05:18 by mverger          ###   ########.fr       */
+/*   Updated: 2023/02/01 17:37:40 by mverger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include/cube.h"
-int worldmap[MAPWIDTH][MAPHEIGHT]=
-{
-{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-{1,0,0,0,0,0,2,2,2,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
-{1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
-{1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,3,0,0,0,3,0,0,0,1},
-{1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
-{1,0,0,0,0,0,2,2,0,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
-{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-{1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-{1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-{1,4,0,0,0,0,5,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-{1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-{1,4,0,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-{1,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-{1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
-};
+// int worldmap[MAPWIDTH][MAPHEIGHT]=
+// {
+// {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+// {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+// {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+// {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+// {1,0,0,0,0,0,2,2,2,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
+// {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
+// {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,3,0,0,0,3,0,0,0,1},
+// {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
+// {1,0,0,0,0,0,2,2,0,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
+// {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+// {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+// {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+// {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+// {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+// {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+// {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+// {1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+// {1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+// {1,4,0,0,0,0,5,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+// {1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+// {1,4,0,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+// {1,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+// {1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+// {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+// };
 
 static int	ft_count_digit(int n)
 {
@@ -317,7 +317,7 @@ void	perform_dda(t_data *data)
 			data->mapy += data->stepy;
 			data->side = 1;
 		}
-		if (worldmap[data->mapx][data->mapy] > 0)
+		if (data->worldmap[data->mapx][data->mapy] > 0)
 			data->hit = 1;
 	}
 	if (data->side == 0)
@@ -384,17 +384,17 @@ void	rotate(t_data *data, int direction)
 
 void	walk_forward(t_data *data)
 {
-	if (worldmap[(int)(data->posx + (data->dirx * MOVSPEED))][(int)(data->posy)] == 0)
+	if (data->worldmap[(int)(data->posx + (data->dirx * MOVSPEED))][(int)(data->posy)] == 0)
 		data->posx += data->dirx * MOVSPEED;
-	if (worldmap[(int)(data->posx)][(int)(data->posy + (data->diry * MOVSPEED))] == 0) //Teamedfunsc3&
+	if (data->worldmap[(int)(data->posx)][(int)(data->posy + (data->diry * MOVSPEED))] == 0) //Teamedfunsc3&
 		data->posy += data->diry * MOVSPEED;
 }
 
 void	walk_backward(t_data *data)
 {
-	if (worldmap[(int)(data->posx - (data->dirx * MOVSPEED))][(int)(data->posy)] == 0)
+	if (data->worldmap[(int)(data->posx - (data->dirx * MOVSPEED))][(int)(data->posy)] == 0)
 		data->posx -= data->dirx * MOVSPEED;
-	if (worldmap[(int)(data->posx)][(int)(data->posy - (data->diry * MOVSPEED))] == 0) //Teamedfunsc3&
+	if (data->worldmap[(int)(data->posx)][(int)(data->posy - (data->diry * MOVSPEED))] == 0) //Teamedfunsc3&
 		data->posy -= data->diry * MOVSPEED;
 }
 
@@ -408,9 +408,9 @@ void	walk_left(t_data *data)
 	
 	tempdirx = data->dirx * cos(3.14/2) - data->diry * sin(3.14/2);
 	tempdiry = data->dirx * sin(3.14/2) + data->diry * cos(3.14/2);
-	if (worldmap[(int)(data->posx + (tempdirx * MOVSPEED))][(int)(data->posy)] == 0)
+	if (data->worldmap[(int)(data->posx + (tempdirx * MOVSPEED))][(int)(data->posy)] == 0)
 		data->posx += tempdirx * MOVSPEED;
-	if (worldmap[(int)(data->posx)][(int)(data->posy + (tempdiry * MOVSPEED))] == 0) //Teamedfunsc3&
+	if (data->worldmap[(int)(data->posx)][(int)(data->posy + (tempdiry * MOVSPEED))] == 0) //Teamedfunsc3&
 		data->posy += tempdiry * MOVSPEED;
 }
 
@@ -424,9 +424,9 @@ void	walk_right(t_data *data)
 	
 	tempdirx = data->dirx * cos(-3.14/2) - data->diry * sin(-3.14/2);
 	tempdiry = data->dirx * sin(-3.14/2) + data->diry * cos(-3.14/2);
-	if (worldmap[(int)(data->posx + (tempdirx * MOVSPEED))][(int)(data->posy)] == 0)
+	if (data->worldmap[(int)(data->posx + (tempdirx * MOVSPEED))][(int)(data->posy)] == 0)
 		data->posx += tempdirx * MOVSPEED;
-	if (worldmap[(int)(data->posx)][(int)(data->posy + (tempdiry * MOVSPEED))] == 0) //Teamedfunsc3&
+	if (data->worldmap[(int)(data->posx)][(int)(data->posy + (tempdiry * MOVSPEED))] == 0) //Teamedfunsc3&
 		data->posy += tempdiry * MOVSPEED;
 }
 
