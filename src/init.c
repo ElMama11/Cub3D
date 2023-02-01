@@ -45,7 +45,6 @@ void	init_textures(t_data *data, char **path_tex)
 	data->img_tex[0].img = mlx_xpm_file_to_image(data->mlx, "textures/chair_shinji", &data->img_tex[0].texwidth, &data->img_tex[0].texheight);
 	data->img_tex[0].addr = mlx_get_data_addr(data->img_tex[0].img, &data->img_tex[0].bits_per_pixel, &data->img_tex[0].line_length, &data->img_tex[0].endian);
 	data->img_tex[1].img = mlx_xpm_file_to_image(data->mlx, path_tex[1], &data->img_tex[1].texwidth, &data->img_tex[1].texheight);
-	printf("%pLA\n", data->img_tex[1].img);
 	data->img_tex[1].addr = mlx_get_data_addr(data->img_tex[1].img, &data->img_tex[1].bits_per_pixel, &data->img_tex[1].line_length, &data->img_tex[1].endian);
 	data->img_tex[2].img = mlx_xpm_file_to_image(data->mlx, path_tex[2], &data->img_tex[2].texwidth, &data->img_tex[2].texheight);
 	data->img_tex[2].addr = mlx_get_data_addr(data->img_tex[2].img, &data->img_tex[2].bits_per_pixel, &data->img_tex[2].line_length, &data->img_tex[2].endian);
@@ -56,8 +55,8 @@ void	init_textures(t_data *data, char **path_tex)
 
 void	init(t_data *data, char **path_tex)
 {
-	data->posx = 22;
-	data->posy = 12;
+	data->posx = 4;
+	data->posy = 15;
 	data->dirx = -1;
 	data->diry = 0;
 	data->planex = 0;

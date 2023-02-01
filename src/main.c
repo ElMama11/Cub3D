@@ -317,7 +317,7 @@ void	perform_dda(t_data *data)
 			data->mapy += data->stepy;
 			data->side = 1;
 		}
-		if (data->worldmap[data->mapx][data->mapy] > 0)
+		if (data->worldmap[data->mapx][data->mapy] == '1')
 			data->hit = 1;
 	}
 	if (data->side == 0)
@@ -384,17 +384,17 @@ void	rotate(t_data *data, int direction)
 
 void	walk_forward(t_data *data)
 {
-	if (data->worldmap[(int)(data->posx + (data->dirx * MOVSPEED))][(int)(data->posy)] == 0)
+	if (data->worldmap[(int)(data->posx + (data->dirx * MOVSPEED))][(int)(data->posy)] == '0')
 		data->posx += data->dirx * MOVSPEED;
-	if (data->worldmap[(int)(data->posx)][(int)(data->posy + (data->diry * MOVSPEED))] == 0) //Teamedfunsc3&
+	if (data->worldmap[(int)(data->posx)][(int)(data->posy + (data->diry * MOVSPEED))] == '0')
 		data->posy += data->diry * MOVSPEED;
 }
 
 void	walk_backward(t_data *data)
 {
-	if (data->worldmap[(int)(data->posx - (data->dirx * MOVSPEED))][(int)(data->posy)] == 0)
+	if (data->worldmap[(int)(data->posx - (data->dirx * MOVSPEED))][(int)(data->posy)] == '0')
 		data->posx -= data->dirx * MOVSPEED;
-	if (data->worldmap[(int)(data->posx)][(int)(data->posy - (data->diry * MOVSPEED))] == 0) //Teamedfunsc3&
+	if (data->worldmap[(int)(data->posx)][(int)(data->posy - (data->diry * MOVSPEED))] == '0')
 		data->posy -= data->diry * MOVSPEED;
 }
 
@@ -408,9 +408,9 @@ void	walk_left(t_data *data)
 	
 	tempdirx = data->dirx * cos(3.14/2) - data->diry * sin(3.14/2);
 	tempdiry = data->dirx * sin(3.14/2) + data->diry * cos(3.14/2);
-	if (data->worldmap[(int)(data->posx + (tempdirx * MOVSPEED))][(int)(data->posy)] == 0)
+	if (data->worldmap[(int)(data->posx + (tempdirx * MOVSPEED))][(int)(data->posy)] == '0')
 		data->posx += tempdirx * MOVSPEED;
-	if (data->worldmap[(int)(data->posx)][(int)(data->posy + (tempdiry * MOVSPEED))] == 0) //Teamedfunsc3&
+	if (data->worldmap[(int)(data->posx)][(int)(data->posy + (tempdiry * MOVSPEED))] == '0')
 		data->posy += tempdiry * MOVSPEED;
 }
 
@@ -424,9 +424,9 @@ void	walk_right(t_data *data)
 	
 	tempdirx = data->dirx * cos(-3.14/2) - data->diry * sin(-3.14/2);
 	tempdiry = data->dirx * sin(-3.14/2) + data->diry * cos(-3.14/2);
-	if (data->worldmap[(int)(data->posx + (tempdirx * MOVSPEED))][(int)(data->posy)] == 0)
+	if (data->worldmap[(int)(data->posx + (tempdirx * MOVSPEED))][(int)(data->posy)] == '0')
 		data->posx += tempdirx * MOVSPEED;
-	if (data->worldmap[(int)(data->posx)][(int)(data->posy + (tempdiry * MOVSPEED))] == 0) //Teamedfunsc3&
+	if (data->worldmap[(int)(data->posx)][(int)(data->posy + (tempdiry * MOVSPEED))] == '0')
 		data->posy += tempdiry * MOVSPEED;
 }
 
@@ -491,12 +491,11 @@ int main(int ac, char **av)
 		write(1, data.worldmap[i], data.map_sizex);
 		write(1, "\n", 1);
 	}
-	return (0);
 	img_init(&data);
 	init(&data, path_tex);
 	mlx_key_hook(data.mlx_win, action, &data);
 	mlx_hook(data.mlx_win, 17, 0L, close_window, &data);
-	// mlx_loop_hook(data.mlx, main_loop, &data);
+	//mlx_loop_hook(data.mlx, main_loop, &data);
 	mlx_loop(data.mlx);
 	return (0);
 }
