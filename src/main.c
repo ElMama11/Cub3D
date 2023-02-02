@@ -6,7 +6,7 @@
 /*   By: mverger <mverger@42lyon.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 16:41:53 by jthibaul          #+#    #+#             */
-/*   Updated: 2023/02/02 16:41:17 by mverger          ###   ########.fr       */
+/*   Updated: 2023/02/02 16:59:03 by mverger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -479,7 +479,7 @@ int main(int ac, char **av)
 	(void)av;
 	if (ac != 2)
 	{
-		write(2, "Error\nMap is missing\n", 22);
+		write(2, "Error\nFirst arg is missing\n", 22);
 		exit(EXIT_FAILURE);
 	}
     path_tex = parsing(&data, av);

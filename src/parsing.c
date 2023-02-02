@@ -6,7 +6,7 @@
 /*   By: mverger <mverger@42lyon.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 15:33:14 by mverger           #+#    #+#             */
-/*   Updated: 2023/02/02 16:45:13 by mverger          ###   ########.fr       */
+/*   Updated: 2023/02/02 17:18:54 by mverger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -282,7 +282,6 @@ int	check_first_line(char *str)
 		}
 		else
 		{
-			printf("Error\nMap is not valid\n");
 			return (0);
 		}
 		i++;
@@ -373,14 +372,18 @@ int	get_map(t_data *data, char *buffer, int mapfd, int mapline)
 	
 	while (line_is_empty(buffer))
 	{
+		free(buffer);
 		buffer = get_next_line(mapfd);
 		if (buffer == NULL)
 			return (mapfd);
-		free(buffer);
 		mapline++;
 	}
 	if (!check_first_line(buffer))
+	{
+		if (buffer)
+			free(buffer);
 		return (mapfd);
+	}
 	malloc_map(data, buffer, mapfd);
 	mapfd = fill_map(data, mapfd, mapline);
 	return (mapfd);
@@ -418,7 +421,7 @@ char **parsing(t_data *data, char **av)
 	path_tex = ft_calloc(sizeof(char *), 4);
 	if (path_tex == 0)
 		return (0);
-	while (!check_all_tex_color(path_tex, data) && *buffer != 0)
+	while (!(check_all_tex_color(path_tex, data) || *buffer == 0))
 	{
 		path_tex = get_path_tex_color(data, buffer, path_tex);
 		if (path_tex == 0)
@@ -446,7 +449,7 @@ char **parsing(t_data *data, char **av)
 	if (data->worldmap == 0 || !check_map(data))
 	{
 		if (data->worldmap == 0)
-			printf("Error\nMap is missing\n");
+			printf("Error\nMap is invalid\n");
 		else
 			free_worldmap(data);
 		if (path_tex)

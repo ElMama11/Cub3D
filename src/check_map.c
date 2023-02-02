@@ -192,11 +192,7 @@ int check_map(t_data *data)
 {
 	int x;
 	int y;
-	for(int i = 0; i < data->map_sizey; i++)
-	{
-		write(1, data->worldmap[i], data->map_sizex);
-		write(1, "\n", 1);
-	}
+
 	x = 0;
 	y = 0;
 	data->posx = 0;
