@@ -6,7 +6,7 @@
 /*   By: mverger <mverger@42lyon.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 16:41:53 by jthibaul          #+#    #+#             */
-/*   Updated: 2023/02/01 17:37:40 by mverger          ###   ########.fr       */
+/*   Updated: 2023/02/02 16:41:17 by mverger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ char	*ft_itoa(int n)
 
 void	free_all(t_data *data)
 {
-	(void)data;
+	free_worldmap(data);
 }
 
 int	close_window(t_data *data)
@@ -485,11 +485,12 @@ int main(int ac, char **av)
     path_tex = parsing(&data, av);
 	if (path_tex == 0)
 		return (0);
-	// for(int i = 0; i < data.map_sizey; i++)
-	// {
-	// 	write(1, data.worldmap[i], data.map_sizex);
-	// 	write(1, "\n", 1);
-	// }
+	for(int i = 0; i < data.map_sizey; i++)
+	{
+		write(1, data.worldmap[i], data.map_sizex);
+		write(1, "\n", 1);
+	}
+	return 0;
 	img_init(&data);
 	init(&data, path_tex);
 	mlx_key_hook(data.mlx_win, action, &data);

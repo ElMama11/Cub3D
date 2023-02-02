@@ -66,7 +66,7 @@ int	is_floor_wall_direction(char c)
 
 int	check_floor(t_data *data, char **worldmap, int y, int x)
 {
-	if (y == data->map_sizey || x == data->map_sizex || y == 0 || x == 0)
+	if (y == data->map_sizey - 1 || x == data->map_sizex - 1 || y == 0 || x == 0)
 		return (0);
 	if (!is_floor_wall_direction(worldmap[y + 1][x]))
 		return (0);
@@ -192,7 +192,11 @@ int check_map(t_data *data)
 {
 	int x;
 	int y;
-
+	for(int i = 0; i < data->map_sizey; i++)
+	{
+		write(1, data->worldmap[i], data->map_sizex);
+		write(1, "\n", 1);
+	}
 	x = 0;
 	y = 0;
 	data->posx = 0;
@@ -201,6 +205,7 @@ int check_map(t_data *data)
 	{
 		while (x < data->map_sizex)
 		{
+			//printf("c=%c   y=%d  x=%d\n", data->worldmap[y][x], y, x);
 			if (!check_map_square(data, data->worldmap, y, x))
 			{
 				printf("Error\nInvalid map\n");

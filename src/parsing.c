@@ -6,7 +6,7 @@
 /*   By: mverger <mverger@42lyon.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 15:33:14 by mverger           #+#    #+#             */
-/*   Updated: 2023/01/26 18:00:40 by mverger          ###   ########.fr       */
+/*   Updated: 2023/02/02 16:45:13 by mverger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,21 @@
 // 	return (i);
 // }
 
+void	ft_free_path_tex(char **tab)
+{
+	int	i;
+
+	i = 0;
+	if (!tab)
+		return ;
+	while (tab[i] && i < 4)
+	{
+		free(tab[i]);
+		i++;
+	}
+	free(tab);
+}
+
 void	check_filename(int map_fd, char **av)
 {
 	if (map_fd == -1 || ft_strstr(av[1], ".cub") != 1)
@@ -88,6 +103,7 @@ char	**free_tab_tex(char **str)
 			free(str[2]);
 		if (str[3])
 			free(str[3]);
+		free(str);
 	}
 	return (NULL);
 }
@@ -105,6 +121,8 @@ int	get_ceilor_floor_color(char *buf, t_data *data, char c)
 	int	g;
 	int	b;
 
+	if ((c == 'C' && data->check_ceiling == 1) || (c == 'F' && data->check_floor == 1))
+		return (0);
 	buf = skip_space(buf);
 	if (ft_isdigit(*buf))
 	{
@@ -146,7 +164,6 @@ int	get_ceilor_floor_color(char *buf, t_data *data, char c)
 		data->check_ceiling = 1;
 		data->ceiling = create_trgb(0, r, g, b);
 	}
-	//else
 	return (1);
 }
 
@@ -196,18 +213,13 @@ char **check_name_color(t_data *data, char *buffer, char **path_tex)
 	{
 		if (!get_ceilor_floor_color(buffer + 2, data, *buffer))
 		{
-			printf("Error\nBad syntax\n");		
+			printf("Error\nBad entries\n");
 			return (free_tab_tex(path_tex));
 		}
 	}
 	else
 	{
 		printf("Error\nBad entries\n");
-		return (free_tab_tex(path_tex));
-	}
-	if (path_tex == 0)
-	{
-		printf("Error\nDouble cardinal direction or color\n");
 		return (free_tab_tex(path_tex));
 	}
 	return (path_tex);	
@@ -278,6 +290,13 @@ int	check_first_line(char *str)
 	return (1);
 }
 
+int	is_char_valid_map(char c)
+{
+	if (c == '1' || c == ' ' || c == '0')
+		return (1);
+	return (0);
+}
+
 void	malloc_map(t_data *data, char *buffer, int mapfd)
 {
 	int	i;
@@ -297,6 +316,7 @@ void	malloc_map(t_data *data, char *buffer, int mapfd)
 		free (buffer);
 		buffer = get_next_line(mapfd);		
 	}
+	free (buffer);
 	data->map_sizex = x;
 	data->map_sizey = y;
 	data->worldmap = calloc(sizeof(char *), y);
@@ -344,6 +364,7 @@ int	fill_map(t_data *data, int mapfd, int mapline)
 		x++;
 		i = 0;
 	}
+	free (buffer);	
 	return (mapfd);
 }
 
@@ -353,13 +374,29 @@ int	get_map(t_data *data, char *buffer, int mapfd, int mapline)
 	while (line_is_empty(buffer))
 	{
 		buffer = get_next_line(mapfd);
+		if (buffer == NULL)
+			return (mapfd);
+		free(buffer);
 		mapline++;
 	}
 	if (!check_first_line(buffer))
-		return (0);
+		return (mapfd);
 	malloc_map(data, buffer, mapfd);
 	mapfd = fill_map(data, mapfd, mapline);
 	return (mapfd);
+}
+
+void	free_worldmap(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < data->map_sizey)
+	{
+		free(data->worldmap[i]);
+		i++;
+	}
+	free(data->worldmap);
 }
 
 
@@ -373,6 +410,7 @@ char **parsing(t_data *data, char **av)
 	map_line = 1;
 	mapfd = open(av[1], O_RDONLY);
 	buffer = get_next_line(mapfd);
+	data->worldmap = 0;
 	data->check_floor = 0;
 	data->check_ceiling = 0;
 	data->path_name = av[1];
@@ -385,11 +423,11 @@ char **parsing(t_data *data, char **av)
 		path_tex = get_path_tex_color(data, buffer, path_tex);
 		if (path_tex == 0)
 		{
-			if (!buffer)
-				free(buffer);			
+			if (buffer)
+				free(buffer);
 			return (NULL);
 		}
-		if (!buffer)
+		if (buffer)
 			free(buffer);
 		buffer = get_next_line(mapfd);
 		map_line++;
@@ -399,15 +437,22 @@ char **parsing(t_data *data, char **av)
 		if (buffer == 0)
 			printf("Error\nMap is missing\n");
 		else
-			printf("Error\nTextures or floor/ceiling color is missing\n");
+			free(buffer);
 		return (NULL);
 	}
-	if (!buffer)
-		free(buffer);
+	free (buffer);
 	mapfd = get_map(data, buffer, mapfd, map_line);
 	close(mapfd);
-	if (!check_map(data))
+	if (data->worldmap == 0 || !check_map(data))
+	{
+		if (data->worldmap == 0)
+			printf("Error\nMap is missing\n");
+		else
+			free_worldmap(data);
+		if (path_tex)
+			ft_free_path_tex(path_tex);
 		return (NULL);
+	}
 	// data->dirx = 1;
 	// data->diry = 0;
 	// data->posx = 1;

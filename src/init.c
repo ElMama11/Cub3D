@@ -6,7 +6,7 @@
 /*   By: mverger <mverger@42lyon.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 15:04:46 by mverger           #+#    #+#             */
-/*   Updated: 2023/01/25 17:58:06 by mverger          ###   ########.fr       */
+/*   Updated: 2023/02/02 16:40:59 by mverger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,5 +65,6 @@ void	init(t_data *data, char **path_tex)
 	data->texnum = 0;
 	data->texx = 0;
 	init_textures(data, path_tex);
+	ft_free_path_tex(path_tex);
 }
 

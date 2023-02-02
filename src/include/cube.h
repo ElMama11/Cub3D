@@ -6,7 +6,7 @@
 /*   By: mverger <mverger@42lyon.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 15:05:30 by mverger           #+#    #+#             */
-/*   Updated: 2023/01/26 17:56:58 by mverger          ###   ########.fr       */
+/*   Updated: 2023/02/02 16:41:06 by mverger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,5 +152,6 @@ void	set_hook(t_data *data);
 char **parsing(t_data *data, char **av);
 int check_map(t_data *data);
 
-
+void	free_worldmap(t_data *data);
+void	ft_free_path_tex(char **tab);
 #endif
