@@ -372,7 +372,8 @@ int	get_map(t_data *data, char *buffer, int mapfd, int mapline)
 	
 	while (line_is_empty(buffer))
 	{
-		free(buffer);
+		if (buffer)
+			free(buffer);
 		buffer = get_next_line(mapfd);
 		if (buffer == NULL)
 			return (mapfd);
@@ -443,7 +444,7 @@ char **parsing(t_data *data, char **av)
 			free(buffer);
 		return (NULL);
 	}
-	free (buffer);
+	//free (buffer);
 	mapfd = get_map(data, buffer, mapfd, map_line);
 	close(mapfd);
 	if (data->worldmap == 0 || !check_map(data))

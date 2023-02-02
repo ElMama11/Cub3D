@@ -490,7 +490,6 @@ int main(int ac, char **av)
 		write(1, data.worldmap[i], data.map_sizex);
 		write(1, "\n", 1);
 	}
-	return 0;
 	img_init(&data);
 	init(&data, path_tex);
 	mlx_key_hook(data.mlx_win, action, &data);
