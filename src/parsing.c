@@ -6,7 +6,7 @@
 /*   By: jthibaul <jthibaul@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 15:33:14 by mverger           #+#    #+#             */
-/*   Updated: 2023/03/17 17:40:14 by jthibaul         ###   ########.fr       */
+/*   Updated: 2023/03/17 18:22:24 by jthibaul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -429,12 +429,10 @@ int	parsing_while(t_data *data, int map_line, int mapfd)
 	return (map_line);
 }
 
-char	**parsing(t_data *data, char **av)
+int	parsing_init(t_data *data, char **av)
 {
-	int		mapfd;
-	int		map_line;
+	int	mapfd;
 
-	map_line = 1;
 	mapfd = open(av[1], O_RDONLY);
 	data->buffer_parsing = get_next_line(mapfd);
 	data->worldmap = 0;
@@ -443,6 +441,31 @@ char	**parsing(t_data *data, char **av)
 	data->path_name = av[1];
 	check_filename(mapfd, av);
 	data->path_tex = ft_calloc(sizeof(char *), 4);
+	return (mapfd);
+}
+
+char **pars_err_ret(t_data *data)
+{
+	if (data->worldmap == 0 || !check_map(data))
+	{
+		if (data->worldmap == 0)
+			printf("Error\nMap is invalid\n");
+		else
+			free_worldmap(data);
+		if (data->path_tex)
+			ft_free_path_tex(data->path_tex);
+		return (NULL);
+	}
+	return (data->path_tex);
+}
+
+char	**parsing(t_data *data, char **av)
+{
+	int		mapfd;
+	int		map_line;
+
+	map_line = 1;
+	mapfd = parsing_init(data, av);
 	if (data->path_tex == 0)
 		return (0);
 	while (!(check_all_tex_color(data->path_tex, data) || *data->buffer_parsing == 0))
@@ -455,15 +478,5 @@ char	**parsing(t_data *data, char **av)
 		return (NULL);
 	mapfd = get_map(data, data->buffer_parsing, mapfd, map_line);
 	close(mapfd);
-	if (data->worldmap == 0 || !check_map(data))
-	{
-		if (data->worldmap == 0)
-			printf("Error\nMap is invalid\n");
-		else
-			free_worldmap(data);
-		if (data->path_tex)
-			ft_free_path_tex(data->path_tex);
-		return (NULL);
-	}
-	return (data->path_tex);
+	return (pars_err_ret(data));
 }
