@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mverger <mverger@42lyon.fr>                +#+  +:+       +#+        */
+/*   By: jthibaul <jthibaul@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 15:05:30 by mverger           #+#    #+#             */
-/*   Updated: 2023/02/02 16:41:06 by mverger          ###   ########.fr       */
+/*   Updated: 2023/03/17 16:55:02 by jthibaul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,10 @@
 /* KEY */
 # define KEY_LEFT 65361
 # define KEY_RIGHT 65363
-# define KEY_W 122
+# define KEY_W 119
 # define KEY_S 115
 # define KEY_D 100
-# define KEY_A 113
+# define KEY_A 97
 # define ECHAP 65307
 
 // Teamedfunsc3&

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mverger <mverger@42lyon.fr>                +#+  +:+       +#+        */
+/*   By: jthibaul <jthibaul@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 15:33:14 by mverger           #+#    #+#             */
-/*   Updated: 2023/02/02 17:18:54 by mverger          ###   ########.fr       */
+/*   Updated: 2023/03/17 16:53:18 by jthibaul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void	check_filename(int map_fd, char **av)
 	}
 }
 
-char *skip_space(char *str)
+char	*skip_space(char *str)
 {
 	while (*str == ' ')
 		str++;
@@ -113,15 +113,14 @@ int	create_trgb(int t, int r, int g, int b)
 	return (t << 24 | r << 16 | g << 8 | b);
 }
 
-
-
 int	get_ceilor_floor_color(char *buf, t_data *data, char c)
 {
 	int	r;
 	int	g;
 	int	b;
 
-	if ((c == 'C' && data->check_ceiling == 1) || (c == 'F' && data->check_floor == 1))
+	if ((c == 'C' && data->check_ceiling == 1)
+		|| (c == 'F' && data->check_floor == 1))
 		return (0);
 	buf = skip_space(buf);
 	if (ft_isdigit(*buf))
@@ -175,7 +174,8 @@ char	*ft_strdup_custom(const char *s)
 
 	i = 0;
 	i2 = ft_strlen(s);
-	if (!(dest = (char*)malloc(sizeof(*dest) * i2 + 1)))
+	dest = (char *)malloc(sizeof(*dest) * i2 + 1);
+	if (!dest)
 		return (NULL);
 	while (s[i] && s[i] != ' ' && s[i] != '\n')
 	{
@@ -186,7 +186,6 @@ char	*ft_strdup_custom(const char *s)
 	return (dest);
 }
 
-
 char	**get_path_name(char *buffer, char **path_tex, int tex_num)
 {
 	buffer = skip_space(buffer);
@@ -194,12 +193,12 @@ char	**get_path_name(char *buffer, char **path_tex, int tex_num)
 	{
 		if (path_tex[tex_num])
 			return (free_tab_tex(path_tex));
-		path_tex[tex_num] = ft_strdup_custom(buffer + 2);				
+		path_tex[tex_num] = ft_strdup_custom(buffer + 2);
 	}
-	return(path_tex);
+	return (path_tex);
 }
 
-char **check_name_color(t_data *data, char *buffer, char **path_tex)
+char	**check_name_color(t_data *data, char *buffer, char **path_tex)
 {
 	if (!ft_strncmp(buffer, "NO ", 3))
 		path_tex = get_path_name(buffer + 3, path_tex, 0);
@@ -222,13 +221,13 @@ char **check_name_color(t_data *data, char *buffer, char **path_tex)
 		printf("Error\nBad entries\n");
 		return (free_tab_tex(path_tex));
 	}
-	return (path_tex);	
+	return (path_tex);
 }
 
-char **get_path_tex_color(t_data *data, char *buffer, char **path_tex)
+char	**get_path_tex_color(t_data *data, char *buffer, char **path_tex)
 {
 	int	i;
-	
+
 	i = 0;
 	while (buffer[i])
 	{
@@ -238,7 +237,6 @@ char **get_path_tex_color(t_data *data, char *buffer, char **path_tex)
 			i++;
 		else
 		{
-			
 			path_tex = check_name_color(data, buffer + i, path_tex);
 			if (path_tex == 0)
 				return (NULL);
@@ -247,12 +245,13 @@ char **get_path_tex_color(t_data *data, char *buffer, char **path_tex)
 		}
 	}	
 	return (path_tex);
-
 }
 
 int	check_all_tex_color(char **path_tex, t_data *data)
 {
-	if (data->check_floor == 1 && data->check_ceiling == 1 && path_tex[0] != NULL && path_tex[1] != NULL && path_tex[2] != NULL && path_tex[3] != NULL)
+	if (data->check_floor == 1 && data->check_ceiling == 1
+		&& path_tex[0] != NULL && path_tex[1] != NULL && path_tex[2]
+		!= NULL && path_tex[3] != NULL)
 		return (1);
 	return (0);
 }
@@ -268,13 +267,12 @@ int	check_first_line(char *str)
 {
 	int	i;
 	int	is_one_one;
-	
+
 	is_one_one = 0;
 	(void)is_one_one;
 	i = 0;
 	while (str[i] != '\n')
 	{
-		
 		if (str[i] == ' ' || str[i] == '1')
 		{
 			if (str[i] == '1')
@@ -313,7 +311,7 @@ void	malloc_map(t_data *data, char *buffer, int mapfd)
 			x = i;
 		y++;
 		free (buffer);
-		buffer = get_next_line(mapfd);		
+		buffer = get_next_line(mapfd);
 	}
 	free (buffer);
 	data->map_sizex = x;
@@ -338,7 +336,7 @@ int	fill_map(t_data *data, int mapfd, int mapline)
 	buffer = 0;
 	close(mapfd);
 	mapfd = open(data->path_name, O_RDONLY);
-	while(i < mapline)
+	while (i < mapline)
 	{
 		if (buffer)
 			free(buffer);
@@ -359,17 +357,16 @@ int	fill_map(t_data *data, int mapfd, int mapline)
 			i++;
 		}
 		free (buffer);
-		buffer = get_next_line(mapfd);		
+		buffer = get_next_line(mapfd);
 		x++;
 		i = 0;
 	}
-	free (buffer);	
+	free (buffer);
 	return (mapfd);
 }
 
 int	get_map(t_data *data, char *buffer, int mapfd, int mapline)
 {
-	
 	while (line_is_empty(buffer))
 	{
 		if (buffer)
@@ -403,11 +400,10 @@ void	free_worldmap(t_data *data)
 	free(data->worldmap);
 }
 
-
-char **parsing(t_data *data, char **av)
+char	**parsing(t_data *data, char **av)
 {
 	int		mapfd;
-	char	*buffer;                 
+	char	*buffer;
 	char	**path_tex;
 	int		map_line;
 
@@ -444,7 +440,6 @@ char **parsing(t_data *data, char **av)
 			free(buffer);
 		return (NULL);
 	}
-	//free (buffer);
 	mapfd = get_map(data, buffer, mapfd, map_line);
 	close(mapfd);
 	if (data->worldmap == 0 || !check_map(data))
@@ -457,9 +452,5 @@ char **parsing(t_data *data, char **av)
 			ft_free_path_tex(path_tex);
 		return (NULL);
 	}
-	// data->dirx = 1;
-	// data->diry = 0;
-	// data->posx = 1;
-	// data->posy = 9;
 	return (path_tex);
 }
