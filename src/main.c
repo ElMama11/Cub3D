@@ -6,7 +6,7 @@
 /*   By: jthibaul <jthibaul@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 16:41:53 by jthibaul          #+#    #+#             */
-/*   Updated: 2023/03/17 17:03:57 by jthibaul         ###   ########.fr       */
+/*   Updated: 2023/03/17 17:46:21 by jthibaul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -479,7 +479,7 @@ int main(int ac, char **av)
 	(void)av;
 	if (ac != 2)
 	{
-		write(2, "Error\nFirst arg is missing\n", 22);
+		write(2, "Error\nFirst arg is missing\n", 27);
 		exit(EXIT_FAILURE);
 	}
     path_tex = parsing(&data, av);

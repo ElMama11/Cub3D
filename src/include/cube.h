@@ -6,7 +6,7 @@
 /*   By: jthibaul <jthibaul@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 15:05:30 by mverger           #+#    #+#             */
-/*   Updated: 2023/03/17 16:55:02 by jthibaul         ###   ########.fr       */
+/*   Updated: 2023/03/17 17:36:45 by jthibaul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,8 @@ typedef struct s_data
 	int		map_sizex;
 	int		map_sizey;
 	char	*path_name;
+	char	**path_tex;
+	char	*buffer_parsing;
 }			t_data;
 
 void	init(t_data *data, char **path_tex);
